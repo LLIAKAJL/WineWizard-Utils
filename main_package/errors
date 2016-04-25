@@ -1,0 +1,12 @@
+[General]
+d3dx9_36=err:d3dcompiler:compile_shader HLSL shader parsing failed.
+mdac27=MDAC
+mfc40=MFC40.DLL
+quartz=err:quartz:GetClassMediaFile Media class not found
+riched20="RICHED20.DLL, fixme:richedit:ITextDocument_fnRange, fixme:richedit:ITextRange_fnGetFont not implemented"
+vcrun2003="MFC71.DLL, MSVCP71.DLL"
+vcrun2005="MFC80.DLL, MSVCP80.DLL"
+vcrun2008="MFC90.DLL, MSVCP90.DLL"
+vcrun6="MFC42.DLL, MSVCP60.DLL", "err:module:import_dll Library MFC42.DLL"
+xact="err:ole:CoGetClassObject class {3eda9b49-2085-498b-9bb2-39a6778493de} not registered, err:module:find_forwarded_export module not found for forward 'xaudio2_7.DllGetClassObject' used by L\"C:\\\\windows\\\\system32\\\\xaudio2_6.dll\", err:ole:COMPOBJ_DllList_Add couldn't find function DllGetClassObject in L\"C:\\\\windows\\\\system32\\\\xaudio2_6.dll\", err:ole:CoGetClassObject no class object {3eda9b49-2085-498b-9bb2-39a6778493de} could be created for context 0x1", "err:ole:COMPOBJ_DllList_Add couldn't load in-process dll L\"C:\\\\windows\\\\system32\\\\xaudio2_6.dll\""
+physx=err:module:import_dll Library physxloader.dll, err:module:import_dll Library PhysXLoader.dll

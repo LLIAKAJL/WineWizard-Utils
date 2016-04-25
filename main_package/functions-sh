@@ -1,0 +1,606 @@
+ww_info()
+{
+    echo "------------------------------------------------------"
+    echo "$@"
+    echo "------------------------------------------------------"
+}
+
+ww_warn()
+{
+    echo "------------------------------------------------------" >&2
+    echo "$@" >&2
+    echo "------------------------------------------------------" >&2
+}
+
+ww_die()
+{
+    ww_warn "$@"
+    exit 1
+}
+
+ww_early_wine()
+{
+    WINEDEBUG=-all wine "$@" 2>/dev/null | ( sed 's/.*1h.=//' | tr -d '\r' | grep -v "Module not found" || true)
+}
+
+ww_kill_all()
+{
+    kill -s KILL $(pgrep "$1")
+}
+
+ww_try()
+{
+    export WINEDLLOVERRIDES
+    "$@"
+    status=$?
+    if test $status -ne 0
+    then
+        ww_die "Note: command '$@' returned status $status. Aborting."
+    fi
+}
+
+ww_cd()
+{
+    cd "$WW_PACKAGES/$1"
+}
+
+ww_cp_all()
+{
+    for F in "$WW_PACKAGES"/$1/*.*
+    do
+        ww_try cp -f "$F" "$WW_C"/windows/system32/
+    done
+}
+
+ww_cp_all_fonts()
+{
+    for F in "$WW_PACKAGES"/$1/*.ttf
+    do
+        ww_try cp -f "$F" "$WW_FONTS"/
+    done
+}
+
+ww_try_regedit()
+{
+    ww_try ww_early_wine regedit /S "$@"
+}
+
+ww_regsvr()
+{
+    ww_try wine regsvr32 /S "$@"
+}
+
+ww_ahk_do()
+{
+    _W_CR=$(printf \\\\r)
+    cat <<_EOF_ | sed "s/\$/$CR/" > "$WW_TMP/tmp.ahk"
+$@
+_EOF_
+    ww_try wine "$WW_PACKAGES/ahk/AutoHotkey.exe" "C:\\windows\\temp\\tmp.ahk"
+    unset _W_CR
+}
+
+ww_override_dlls()
+{
+    _W_mode=$1
+    case $_W_mode in
+        disabled)
+            _W_mode="" ;;
+    esac
+    shift
+    (
+        echo "REGEDIT4"
+        echo ""
+        echo "[HKEY_CURRENT_USER\\Software\\Wine\\DllOverrides]"
+    ) > "$WW_TMP"/override-dll.reg    
+    while test "$1" != ""
+    do
+        case "$1" in
+            comctl32)
+                rm -rf "$WW_WIN"/winsxs/manifests/x86_microsoft.windows.common-controls_6595b64144ccf1df_6.0.2600.2982_none_deadbeef.manifest
+                ;;
+        esac
+        if [ "$_W_mode" = default ]
+        then
+            echo "\"*$1\"=-" >> "$WW_TMP"/override-dll.reg
+        else
+            echo "\"*$1\"=\"$_W_mode\"" >> "$WW_TMP"/override-dll.reg
+        fi
+        shift
+    done
+    ww_try_regedit "$WW_TMP"/override-dll.reg
+    unset _W_mode
+}
+
+ww_override_app_dlls()
+{
+    _W_app=$1
+    shift
+    _W_mode=$1
+    shift
+    case $_W_mode in
+        b|builtin) _W_mode=builtin ;;
+        n|native) _W_mode=native ;;
+        default) _W_mode=default ;;
+        d|disabled) _W_mode="" ;;
+    esac
+    (
+        echo "REGEDIT4"
+        echo ""
+        echo "[HKEY_CURRENT_USER\\Software\\Wine\\AppDefaults\\$_W_app\\DllOverrides]"
+    ) > "$WW_TMP"/override-dll.reg
+    while test "$1" != ""
+    do
+        case "$1" in
+            comctl32)
+                rm -rf "$WW_WIN"/winsxs/manifests/x86_microsoft.windows.common-controls_6595b64144ccf1df_6.0.2600.2982_none_deadbeef.manifest
+                ;;
+        esac
+        if [ "$_W_mode" = default ]
+        then
+            echo "\"*$1\"=-" >> "$WW_TMP"/override-dll.reg
+        else
+            echo "\"*$1\"=\"$_W_mode\"" >> "$WW_TMP"/override-dll.reg
+        fi
+        shift
+    done
+    ww_try_regedit "$WW_TMP"/override-dll.reg
+    rm "$WW_TMP"/override-dll.reg
+    unset _W_app _W_mode
+}
+
+ww_set_winver()
+{
+    (
+        wine reg delete "HKLM\\Software\\Microsoft\\Windows\\CurrentVersion" /v SubVersionNumber /f || true
+        wine reg delete "HKLM\\Software\\Microsoft\\Windows\\CurrentVersion" /v VersionNumber /f || true
+        wine reg delete "HKLM\\Software\\Microsoft\\Windows NT\\CurrentVersion" /v CSDVersion /f || true
+        wine reg delete "HKLM\\Software\\Microsoft\\Windows NT\\CurrentVersion" /v CurrentBuildNumber /f || true
+        wine reg delete "HKLM\\Software\\Microsoft\\Windows NT\\CurrentVersion" /v CurrentVersion /f || true
+        wine reg delete "HKLM\\System\\CurrentControlSet\\Control\\ProductOptions" /v ProductType /f || true
+        wine reg delete "HKLM\\System\\CurrentControlSet\\Control\\ServiceCurrent" /v OS /f || true
+        wine reg delete "HKLM\\System\\CurrentControlSet\\Control\\Windows" /v CSDVersion /f || true
+        wine reg delete "HKCU\\Software\\Wine" /v Version /f || true
+        wine reg delete "HKLM\\System\\CurrentControlSet\\Control\\ProductOptions" /v ProductType /f || true
+    ) > /dev/null 2>&1
+    case $1 in
+        win98)
+            echo "Setting Windows version to $1"
+            (
+                echo "REGEDIT4"
+                echo ""
+                echo "[HKEY_LOCAL_MACHINE\\Software\\Microsoft\\Windows\\CurrentVersion]"
+                echo "\"ProductName\"=\"Microsoft Windows 98\""
+                echo "\"SubVersionNumber\"=\" A \""
+                echo "\"VersionNumber\"=\"4.10.2222\""
+            ) > "$WW_TMP"/set-winver.reg    
+            ww_try_regedit "$WW_TMP"/set-winver.reg
+            return
+            ;;
+        nt40)
+            echo "Setting Windows version to $1"
+            (
+                echo "REGEDIT4"
+                echo ""
+                echo "[HKEY_LOCAL_MACHINE\\Software\\Microsoft\\Windows NT\\CurrentVersion]"
+                echo "\"CSDVersion\"=\"Service Pack 6a\""
+                echo "\"CurrentBuildNumber\"=\"1381\""
+                echo "\"CurrentVersion\"=\"4.0\""
+                echo ""
+                echo "[HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\ProductOptions]"
+                echo "\"ProductType\"=\"WinNT\""
+                echo ""
+                echo "[HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\ServiceCurrent]"
+                echo "\"OS\"=\"Windows_NT\""
+                echo ""
+                echo "[HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Windows]"
+                echo "\"CSDVersion\"=dword:00000600"
+            ) > "$WW_TMP"/set-winver.reg
+            ww_try_regedit "$WW_TMP"/set-winver.reg
+            return
+            ;;
+        win2k)
+            csdversion="Service Pack 4"
+            currentbuildnumber="2195"
+            currentversion="5.0"
+            csdversion_hex=dword:00000400
+            ;;
+        winxp)
+            csdversion="Service Pack 3"
+            currentbuildnumber="2600"
+            currentversion="5.1"
+            csdversion_hex=dword:00000300
+            ;;
+        win2k3)
+            csdversion="Service Pack 2"
+            currentbuildnumber="3790"
+            currentversion="5.2"
+            csdversion_hex=dword:00000200
+            wine reg add "HKLM\\System\\CurrentControlSet\\Control\\ProductOptions" /v ProductType /d "ServerNT" /f
+            ;;
+        vista)
+            csdversion="Service Pack 2"
+            currentbuildnumber="6002"
+            currentversion="6.0"
+            csdversion_hex=dword:00000200
+            wine reg add "HKLM\\System\\CurrentControlSet\\Control\\ProductOptions" /v ProductType /d "WinNT" /f
+            ;;
+        win7)
+            csdversion="Service Pack 1"
+            currentbuildnumber="7601"
+            currentversion="6.1"
+            csdversion_hex=dword:00000100
+            wine reg add "HKLM\\System\\CurrentControlSet\\Control\\ProductOptions" /v ProductType /d "WinNT" /f
+            ;;
+        *)
+            ww_die "Invalid Windows version given.";;
+    esac
+    echo "Setting Windows version to $1"
+    (
+        echo "REGEDIT4"
+        echo ""
+        echo "[HKEY_LOCAL_MACHINE\\Software\\Microsoft\\Windows NT\\CurrentVersion]"
+        echo "\"CSDVersion\"=\"$csdversion\""
+        echo "\"CurrentBuildNumber\"=\"$currentbuildnumber\""
+        echo "\"CurrentVersion\"=\"$currentversion\""
+        echo ""
+        echo "[HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Windows]"
+        echo "\"CSDVersion\"=$csdversion_hex"
+    ) > "$WW_TMP"/set-winver.reg    
+    ww_try_regedit "$WW_TMP"/set-winver.reg
+}
+
+ww_wine_version()
+{
+    case $2 in
+        0*|1.0|1.0.*) ww_die "bug: $2 is before 1.1, we don't bother with bugs fixed that long ago" ;;
+        1.1.*) _W_minor=1; _W_micro=$(echo $2 | sed 's/.*\.//');;
+        1.2) _W_minor=2; _W_micro=0;;
+        1.2.*) _W_minor=2; _W_micro=$(echo $2 | sed 's/.*\.//');;
+        1.3.*) _W_minor=3; _W_micro=$(echo $2 | sed 's/.*\.//');;
+        1.4) _W_minor=4; _W_micro=0;;
+        1.4.*) _W_minor=4; _W_micro=$(echo $2 | sed 's/.*\.//');;
+        1.5.*) _W_minor=5; _W_micro=$(echo $2 | sed 's/.*\.//');;
+        1.6|1.6-rc*) _W_minor=6; _W_micro=0;;
+        1.6.*) _W_minor=6; _W_micro=$(echo $2 | sed 's/.*\.//');;
+        1.7.*) _W_minor=7; _W_micro=$(echo $2 | sed 's/.*\.//');;
+        1.8.*) _W_minor=8; _W_micro=$(echo $2 | sed 's/.*\.//');;
+        1.9.*) _W_minor=9; _W_micro=$(echo $2 | sed 's/.*\.//');;
+        *) ww_die "bug: unrecognized version $2";;
+    esac
+    if test $WW_WINE_MINOR = $_W_minor
+    then
+        test $WW_WINE_MICRO $1 $_W_micro || return 1
+    else
+        test $WW_WINE_MINOR $1 $_W_minor || return 1
+    fi
+}
+
+ww_wine_version_in()
+{
+    for _W_range
+    do
+        _W_val1=$(echo $_W_range | sed 's/,.*//')
+        _W_val2=$(echo $_W_range | sed 's/.*,//')
+        case $_W_range in
+            ,*)                                   ww_wine_version   -le "$_W_val2" && unset _W_range _W_val1 _W_val2 && return 0;;
+            *,) ww_wine_version -ge "$_W_val1"                                     && unset _W_range _W_val1 _W_val2 && return 0;;
+            *)  ww_wine_version -ge "$_W_val1" && ww_wine_version   -le "$_W_val2" && unset _W_range _W_val1 _W_val2 && return 0;;
+        esac
+    done
+    unset _W_range _W_val1 _W_val2
+    return 1
+}
+
+ww_workaround_wine_bug()
+{
+    case "$2" in
+        [0-9]*) ww_die "bug: want message in w_workaround_wine_bug arg 2, got $2" ;;
+        "") _W_msg="";;
+        *)  _W_msg="-- $2";;
+    esac
+    if test "$3" && ww_wine_version_in $3 $4 $5 $6
+    then
+        echo Current wine does not have wine bug $1, so not applying workaround
+        return 1
+    fi
+    case $LANG in
+        da*) ww_warn "Arbejder uden om wine-fejl ${1} $_W_msg" ;;
+        de*) ww_warn "Wine-Fehler ${1} wird umgegangen $_W_msg" ;;
+        pl*) ww_warn "Obchodzenie bХФdu w wine ${1} $_W_msg" ;;
+        uk*) ww_warn "ааБббаД аПаОаМаИаЛаКаИ ${1} $_W_msg" ;;
+        *)   ww_warn "Working around wine bug ${1} $_W_msg" ;;
+    esac
+    return 0
+}
+
+ww_register_font()
+{
+    file=$1
+    shift
+    font=$1
+    case "$file" in
+        *.TTF|*.ttf) font="$font (TrueType)";;
+    esac
+    (
+        echo "REGEDIT4"
+        echo ""
+        echo "[HKEY_LOCAL_MACHINE\\Software\\Microsoft\\Windows NT\\CurrentVersion\\Fonts]"
+        echo "\"$font\"=\"$file\""
+    ) > "$WW_TMP"/_register-font.reg
+    ww_try_regedit "$WW_TMP"/_register-font.reg
+    (
+        echo "REGEDIT4"
+        echo ""
+        echo "[HKEY_LOCAL_MACHINE\\Software\\Microsoft\\Windows\\CurrentVersion\\Fonts]"
+        echo "\"$font\"=\"$file\""
+    ) > "$WW_TMP"/_register-font.reg
+    ww_try_regedit "$WW_TMP"/_register-font.reg
+}
+
+ww_register_font_replacement()
+{
+    _W_alias=$1
+    shift
+    _W_font=$1
+    (
+        echo "REGEDIT4"
+        echo ""
+        echo "[HKEY_CURRENT_USER\\Software\\Wine\\Fonts\\Replacements]"
+        echo "\"$_W_alias\"=\"$_W_font\""
+    ) > "$WW_TMP"/_register-font-replacements.reg
+    ww_try_regedit "$WW_TMP"/_register-font-replacements.reg
+    unset _W_alias _W_font
+}
+
+ww_remove_mono()
+{
+    mono_uuid="$(wine uninstaller --list | grep Mono | cut -f1 -d\|)"
+    if test "$mono_uuid"
+    then
+        wine uninstaller --remove $mono_uuid
+    else
+        ww_warn "Mono does not appear to be installed."
+    fi
+}
+
+ww_declare_exe()
+{
+    _W_dir="$1"
+    _W_exe="$2"
+    if test "$3"
+    then
+        _W_name="$3"
+    fi
+    (
+        echo "c:"
+        echo "cd \"$_W_dir\""
+        echo "$_W_exe %*"
+    ) > "$WW_C/run-$_W_name.bat"
+    unset _W_dir _W_exe _W_name
+}
+
+ww_installed()
+{
+    if test -f "$1" && ! grep -q "Wine placeholder DLL" "$1"
+    then
+        return 0
+    fi
+    return 1
+}
+
+ww_fontfix()
+{
+    if test -f /usr/share/fonts/truetype/arphic/ukai.ttf
+    then
+        gotsum=$(sha1sum < /usr/share/fonts/truetype/arphic/ukai.ttf | sed 's/ .*//')
+        if [ "$gotsum"x = "96e1121f89953e5169d3e2e7811569148f573985"x ]
+        then
+            ww_die "Your installed ukai.ttf is known to be broken. Upgrade your ttf-arphic font package!"
+        fi
+    fi
+    if test -f /usr/share/fonts/truetype/arphic/uming.ttf
+    then
+        gotsum=$(sha1sum < /usr/share/fonts/truetype/arphic/uming.ttf | sed 's/ .*//')
+        if [ "$gotsum"x = "2a4f4a69e343c21c24d044b2cb19fd4f0decc82c"x ]
+        then
+            ww_die "Your installed uming.ttf is known to be broken. Upgrade your ttf-uming font package!"
+        fi
+    fi
+    if xlsfonts 2>/dev/null | egrep -i "samyak|oriya"
+    then
+        ww_die "Please uninstall the Samyak/Oriya font, e.g. 'sudo dpkg -r ttf-oriya-fonts', then log out and log in again. That font causes strange crashes in .net programs."
+    fi
+}
+
+ww_set_virtual_desktop()
+{
+    desktop=$1
+    case $desktop in
+        off)
+            cat > "$WW_TMP"/vd.reg <<_EOF_
+REGEDIT4
+
+[HKEY_CURRENT_USER\Software\Wine\Explorer]
+"Desktop"=-
+[HKEY_CURRENT_USER\Software\Wine\Explorer\Desktops]
+"Default"=-
+
+_EOF_
+            ;;
+        on)
+            cat > "$WW_TMP"/vd.reg <<_EOF_
+REGEDIT4
+
+[HKEY_CURRENT_USER\Software\Wine\Explorer]
+"Desktop"="Default"
+[HKEY_CURRENT_USER\Software\Wine\Explorer\Desktops]
+"Default"="$2"
+
+_EOF_
+            ;;
+    esac
+    ww_try_regedit "$WW_TMP"/vd.reg
+}
+
+ww_set_wined3d_var()
+{
+    case $2 in
+        disable*) arg=disabled;;
+        enable*) arg=enabled;;
+        hard*) arg=hardware;;
+        repack) arg=repack;;
+        backbuffer|fbo|gdi|none|opengl|readdraw|readtex|texdraw|textex|auto) arg=$2;;
+        [0-9]*) arg=$2;;
+        *) ww_die "illegal value $2 for $1";;
+    esac
+    echo "Setting Direct3D/$1 to $arg"
+    cat > "$WW_TMP"/set-wined3d.reg <<_EOF_
+REGEDIT4
+
+[HKEY_CURRENT_USER\Software\Wine\Direct3D]
+"$1"="$arg"
+
+_EOF_
+    ww_try_regedit "$WW_TMP"\\set-wined3d.reg
+}
+
+ww_set_mwo()
+{
+    case $1 in
+        enable*) arg=enabled;;
+        disable*) arg=disable;;
+        force) arg=force;;
+        *) ww_die "illegal value $1 for MouseWarpOverride";;
+    esac
+
+    echo "Setting MouseWarpOverride to $arg"
+cat > "$WW_TMP"/set-mwo.reg <<_EOF_
+REGEDIT4
+
+[HKEY_CURRENT_USER\Software\Wine\DirectInput]
+"MouseWarpOverride"="$arg"
+
+_EOF_
+    ww_try_regedit "$WW_TMP"/set-mwo.reg
+}
+
+ww_set_grabfullscreen()
+{
+    case $1 in
+        y|n) arg=$1;;
+        *) ww_die "illegal value $1 for GrabFullscreen";;
+    esac
+
+    echo "Setting GrabFullscreen to $arg"
+    cat > "$WW_TMP"/set-gfs.reg <<_EOF_
+REGEDIT4
+
+[HKEY_CURRENT_USER\Software\Wine\X11 Driver]
+"GrabFullscreen"="$arg"
+
+_EOF_
+    ww_try_regedit "$WW_TMP"/set-gfs.reg
+}
+
+ww_set_windowmanagerdecorated()
+{
+    case $1 in
+        y|n) arg=$1;;
+        *) ww_die "illegal value $1 for Decorated";;
+    esac
+
+    echo "Setting Decorated to $arg"
+    cat > "$WW_TMP"/set-wmd.reg <<_EOF_
+REGEDIT4
+
+[HKEY_CURRENT_USER\Software\Wine\X11 Driver]
+"Decorated"="$arg"
+
+_EOF_
+    ww_try_regedit "$WW_TMP"/set-wmd.reg
+}
+
+ww_set_windowmanagermanaged()
+{
+    case $1 in
+        y|n) arg=$1;;
+        *) ww_die "illegal value $1 for Managed";;
+    esac
+
+    echo "Setting Managed to $arg"
+    cat > "$WW_TMP"/set-wmm.reg <<_EOF_
+REGEDIT4
+
+[HKEY_CURRENT_USER\Software\Wine\X11 Driver]
+"Managed"="$arg"
+
+_EOF_
+    ww_try_regedit "$WW_TMP"/set-wmm.reg
+}
+
+ww_set_fontsmooth()
+{
+    case $1 in
+        disable)   FontSmoothing=0; FontSmoothingOrientation=1; FontSmoothingType=0;;
+        gray|grey) FontSmoothing=2; FontSmoothingOrientation=1; FontSmoothingType=1;;
+        bgr)       FontSmoothing=2; FontSmoothingOrientation=0; FontSmoothingType=2;;
+        rgb)       FontSmoothing=2; FontSmoothingOrientation=1; FontSmoothingType=2;;
+        *) ww_die "unknown font smoothing type $1";;
+    esac
+
+    echo "Setting font smoothing to $1"
+
+    cat > "$WW_TMP"/fontsmooth.reg <<_EOF_
+REGEDIT4
+
+[HKEY_CURRENT_USER\Control Panel\Desktop]
+"FontSmoothing"="$FontSmoothing"
+"FontSmoothingGamma"=dword:00000578
+"FontSmoothingOrientation"=dword:0000000$FontSmoothingOrientation
+"FontSmoothingType"=dword:0000000$FontSmoothingType
+
+_EOF_
+    ww_try_regedit "$WW_TMP"\\fontsmooth.reg
+}
+
+ww_set_sound()
+{
+    echo "Setting sound driver to $1"
+    cat > "$WW_TMP"/set-sound.reg <<_EOF_
+REGEDIT4
+
+[HKEY_CURRENT_USER\Software\Wine\Drivers]
+"Audio"="$1"
+
+_EOF_
+    ww_try_regedit "$WW_TMP"\\set-sound.reg
+}
+
+ww_set_videomemorysize()
+{
+    size=$1
+    echo "Setting video memory size to $size"
+
+    case $size in
+    default)
+
+    cat > "$WW_TMP"/set-video.reg <<_EOF_
+REGEDIT4
+
+[HKEY_CURRENT_USER\Software\Wine\Direct3D]
+"VideoMemorySize"=-
+
+_EOF_
+    ;;
+    *)
+    cat > "$WW_TMP"/set-video.reg <<_EOF_
+REGEDIT4
+
+[HKEY_CURRENT_USER\Software\Wine\Direct3D]
+"VideoMemorySize"="$size"
+
+_EOF_
+    esac
+    ww_try_regedit "$WW_TMP"\\set-video.reg
+}

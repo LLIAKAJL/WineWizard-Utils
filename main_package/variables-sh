@@ -1,0 +1,30 @@
+WW_ARCH=%1
+XDG_CACHE_HOME="${XDG_CACHE_HOME:-$HOME/.cache}"
+CACHE="$XDG_CACHE_HOME/winewizard"
+WW_PACKAGES="$WINEPREFIX/.packages"
+WW_C="$WINEPREFIX/dosdevices/c:"
+WW_WIN="$WW_C/windows"
+case "$WW_ARCH" in
+    win32) WW_SYS32="$WW_WIN/system32" ;;
+    win64) WW_SYS64="$WW_WIN/system32"
+           WW_SYS32="$WW_WIN/syswow64" ;;
+esac
+WW_FONTS="$WW_WIN/Fonts"
+WW_TMP="$WW_WIN/temp"
+WW_PROGRAM86="$WW_C/Program Files"
+WW_COMMON86="$WW_PROGRAM86/Common Files"
+WW_WINE_VER=$(ww_early_wine --version | sed 's/.*wine/wine/')
+case "$WW_WINE_VER" in
+    wine-1.4-*) WW_WINE_VER="wine-1.4.40"; export WW_WINE_VER ;;
+    wine-1.4) WW_WINE_VER="wine-1.4.0"; export WW_WINE_VER ;;
+    wine-1.6-*) WW_WINE_VER="wine-1.6.0"; export WW_WINE_VER ;;
+    wine-1.6) WW_WINE_VER="wine-1.6.0"; export WW_WINE_VER ;;
+    wine-1.7-*) WW_WINE_VER="wine-1.7.0"; export WW_WINE_VER ;;
+    wine-1.7.*) WW_WINE_VER="wine-1.7.0"; export WW_WINE_VER ;;
+    wine-1.8-*) WW_WINE_VER="wine-1.8.0"; export WW_WINE_VER ;;
+    wine-1.8) WW_WINE_VER="wine-1.8.0"; export WW_WINE_VER ;;
+    wine-1.9-*) WW_WINE_VER="wine-1.9.0"; export WW_WINE_VER ;;
+    wine-1.9) WW_WINE_VER="wine-1.9.0"; export WW_WINE_VER ;;
+esac
+WW_WINE_MINOR=$(echo $WW_WINE_VER | sed 's/wine-1\.\([0-9]*\)\..*/\1/')
+WW_WINE_MICRO=$(echo $WW_WINE_VER | sed 's/wine-1.[0-9][0-9]*\.\([0-9]*\).*/\1/')
