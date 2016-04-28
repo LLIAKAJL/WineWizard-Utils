@@ -9,3 +9,4 @@ packages-sh=1
 required=1
 urls=1
 variables-sh=1
+versions=1
