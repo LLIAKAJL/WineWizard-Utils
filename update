@@ -1,5 +1,11 @@
 [General]
 Version=0.4
-MainPackageVersion=4
-MainPackageUrl=http://my-files.ru/Save/5j6n02/main_package.wwp
-MainPackageHash=5d7fcd619ee6fcf4e5ed48e706870f08
+[Packages]
+urls=1
+errors=1
+functions-sh=1
+hashes=1
+packages-sh=1
+required=1
+urls=1
+variables-sh=1
