@@ -1729,7 +1729,7 @@ cabextract\Body=if test ! -x \"`which cabextract 2>/dev/null`\"\nthen\n    ww_di
 cd\Body=ww_try cd \"$@\"
 cd_repo\Body=ww_cd \"$WW_CACHE\"
 cd_repo_wine\Body=ww_cd_repo\nww_wine \"$@\"
-clear_temp\Body=ww_info \"Cleaning up temp folder\"\ntest -d \"$WW_WINDOWS\"/Temp && rm -rf \"$WW_WINDOWS\"/Temp\ntest -d \"$WW_TEMP\" && rm -rf \"$WW_TEMP\"\nmkdir -p \"$WW_TEMP\"
+clear_temp\Body=test -d \"$WW_WINDOWS\"/Temp && rm -rf \"$WW_WINDOWS\"/Temp\ntest -d \"$WW_TEMP\" && rm -rf \"$WW_TEMP\"\nmkdir -p \"$WW_TEMP\"
 cp\Body=ww_try cp -f \"$@\"
 d3dx_helper\Body="dllname=$1\nww_cabextract -d \"$WW_TEMP\" -L -F \"*$dllname*x86*\" \"$WW_DX_FEB_PATH\"\nfor x in \"$WW_TEMP\"/*.cab\ndo\n    ww_cabextract -d \"$WW_SYSTEM32\" -L -F \"$dllname.dll\" \"$x\"\ndone\nif test \"$WW_ARCH\" = \"64\"\nthen\n    ww_cabextract -d \"$WW_TEMP\" -L -F \"*$dllname*x64*\" \"$WW_DX_FEB_PATH\"\n    for x in \"$WW_TEMP\"/*x64.cab\n    do\n        ww_cabextract -d \"$WW_SYSTEM64\" -L -F \"$dllname.dll\" \"$x\"\n    done\nfi\nww_override native $dllname"
 die\Body=ww_warn \"$@\"\nexit 1
