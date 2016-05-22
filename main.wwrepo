@@ -3136,7 +3136,7 @@ vcrun6sp6\Help=Visual C++ 6 sp6 libraries (with fixes in atl and mfc)
 vcrun6sp6\Install="ww_cabextract \"$WW_CACHE\"/vcrun6sp6.exe -d \"$WW_TEMP\" -F vcredist.exe\n\nww_try rm -f \"$WW_SYSTEM32\"/comcat.dll\nww_try rm -f \"$WW_SYSTEM32\"/msvcrt.dll\nww_try rm -f \"$WW_SYSTEM32\"/oleaut32.dll\nww_try rm -f \"$WW_SYSTEM32\"/olepro32.dll\nww_try rm -f \"$WW_SYSTEM32\"/stdole2.tlb\n\nww_cd \"$WW_TEMP\"\nwine vcredist.exe\n\nstatus=$?\ncase $status in\n    0|43) ;;\n    *) ww_die vcrun6sp6 installation failed\nesac\n\nww_cabextract vcredist.exe -d \"$WW_SYSTEM32\" -F mfc42u.dll"
 videomemorysize\Check=false
 videomemorysize\Help=Set video memory size from settings
-videomemorysize\Install=ww_set_videomemorysize \"$WW_MEMORY_SIZE\"
+videomemorysize\Install=ww_set_videomemorysize \"$WW_VMEMORY_SIZE\"
 vjrun20\Category=Runtime
 vjrun20\Check=ww_native \"$WW_WINDOWS/Microsoft.NET/Framework/VJSharp/VJSharpSxS10.dll\"
 vjrun20\Files=vjrun20.exe
