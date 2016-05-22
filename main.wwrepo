@@ -3276,7 +3276,7 @@ xna40\Category=.Net
 xna40\Check=ww_native \"$WW_PROGRAM_FILES/Common Files/Microsoft Shared/XNA/Framework/v4.0/XnaNative.dll\"
 xna40\Files=xna40.msi
 xna40\Help=MS XNA Framework Redistributable 4.0
-xna40\Install="if ww_workaround_bug 30718\nthen\n    ww_warn \"$W_PACKAGE may not install properly in wine yet\"\nfi\n\nexport COMPlus_OnlyUseLatestCLR=1\nww_install dotnet40\n\nww_cd_repo_wine msiexec $WW_UNATTENDED_SLASH_QUIET /i xna40.exe"
+xna40\Install="if ww_workaround_wine_bug 30718\nthen\n    ww_warn \"$W_PACKAGE may not install properly in wine yet\"\nfi\n\nexport COMPlus_OnlyUseLatestCLR=1\nww_install dotnet40\n\nww_cd_repo_wine msiexec $WW_UNATTENDED_SLASH_QUIET /i xna40.exe"
 xna40\Required=dotnet40
 xvid\Category=Codecs
 xvid\Check=ww_exists \"$WW_PROGRAM_FILES/Xvid/xvid.ico\"
