@@ -2723,7 +2723,7 @@ ie8\Required=msls31
 ie8_kb2936068\Check=ww_exists \"$WW_WINDOWS/KB2936068-IE8.log\"
 ie8_kb2936068\Files=ie8_kb2936068.exe
 ie8_kb2936068\Help=Cumulative Security Update for Internet Explorer 8
-ie8_kb2936068\Install="quiet=\"$WW_UNATTENDED_SLASH_QUIET /forcerestart\"\n\nww_cd_repo_wine ie8_kb2936068.exe $quiet\nstatus=$?\ncase $status in\n    0|194) ;;\n    *) ww_die \"ie8_kb2936068 installation failed\"\nesac"
+ie8_kb2936068\Install="ww_install ie8\nww_cd_repo\nwine ie8_kb2936068.exe $WW_UNATTENDED_SLASH_QUIET /forcerestart\nstatus=$?\ncase $status in\n    0|194) ;;\n    *) ww_die \"ie8_kb2936068 installation failed\"\nesac"
 ie8_kb2936068\Required=ie8
 ipamona\Category=Fonts
 ipamona\Check=ww_exists \"$WW_FONTS/ipag-mona.ttf\"
