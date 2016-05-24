@@ -877,7 +877,7 @@ mfc40.cab\Mirrors=https://web.archive.org/web/20070316220826/http://activex.micr
 mfc40.cab\RE=
 mfc40.cab\Sum=53c570e2c811674d6e4fa46cff5a3a04cd0ffc24
 mfc71.zip\Mirrors=http://www.dll-files.com/dllindex/dll-files.shtml?mfc71
-mfc71.zip\RE=
+mfc71.zip\RE="href=\"(http://download\\.dll-files.com/f35a584e947a5b401feb0fe01db4a0d7.*)\">"
 mfc71.zip\Sum=9ffdd079dace2723e1849dd93bb23ed7b9c3b06b
 mscomct2.cab\Mirrors=https://web.archive.org/web/20141012205821/http://activex.microsoft.com/controls/vb6/mscomct2.cab
 mscomct2.cab\RE=
@@ -901,10 +901,10 @@ msscript.exe\Mirrors=http://download.microsoft.com/download/d/2/a/d2a7430c-6d5b-
 msscript.exe\RE=
 msscript.exe\Sum=fd9f2f23357ab11ae70682d6864f7e9f188adf2a
 msvcp71.zip\Mirrors=http://www.dll-files.com/dllindex/dll-files.shtml?msvcp71
-msvcp71.zip\RE=
+msvcp71.zip\RE="href=\"(http://download\\.dll-files.com/561fa2abb31dfa8fab762145f81667c2.*)\">"
 msvcp71.zip\Sum=9119ded781b67b3ff7825218113c697ef683212b
 msvcr71.zip\Mirrors=http://www.dll-files.com/dllindex/dll-files.shtml?msvcr71
-msvcr71.zip\RE=
+msvcr71.zip\RE="href=\"(http://download\\.dll-files.com/86f1895ae8c5e8b17d99ece768a70732.*)\">"
 msvcr71.zip\Sum=6db2a3fd269fa264ffc66dc491bb1dc223bbc70e
 msxml3.msi\Mirrors=ftp://85.66.4.250/E_meghajto/ZOLI_C_SAVE/Documents%20and%20Settings/Docsis/Local%20Settings/Temp/NERO14767/Data/Redist/msxml3.msi
 msxml3.msi\RE=
