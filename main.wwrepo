@@ -2927,7 +2927,7 @@ psm_3\Check=false
 psm_3\Help=Set MaxShaderModelPS to 3
 psm_3\Install=ww_set_wined3d_var MaxShaderModelPS 3
 python26\Check=ww_native \"$WW_C/Python26/python.exe\"
-python26\Files=python26.exe
+python26\Files=python26.exe, python26.msi
 python26\Help="Python Interpreter, version 2.6.2"
 python26\Install="if [ \"$WW_WINE_VERSION\" = \"wine-1.4.1\" ]\nthen\n    ww_die \"This installer is broken under $WW_WINE_VERSION. Please set another Wine. See https://code.google.com/p/winetricks/issues/detail?id=347 for more info.\"\nfi\n\nww_cd_repo_wine msiexec /i python26.msi ALLUSERS=1 $WW_UNATTENDED_SLASH_Q\n\nww_ahk \"\n    SetTitleMatchMode, 2\n    run python26.exe\n    WinWait, Setup, Wizard will install pywin32\n    ControlClick Button2\n    WinWait, Setup, Python 2.6 is required\n    ControlClick Button3\n    WinWait, Setup, Click Next to begin\n    ControlClick Button3\n    WinWait, Setup, finished\n    ControlClick Button4\n    WinWaitClose\n\""
 python26\Required=ahk
