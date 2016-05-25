@@ -1773,6 +1773,7 @@ win7sp1_helper\Body="filename=$1\nww_cabextract -d \"$WW_TEMP\" -L -F $filename 
 wine\Body=ww_try wine \"$@\"
 wine_version\Body="case $2 in\n    1.3.*)     minor=3; micro=`echo $2 | sed 's/.*\\.//'`;;\n    1.4)       minor=4; micro=0;;\n    1.4.*)     minor=4; micro=`echo $2 | sed 's/.*\\.//'`;;\n    1.5.*)     minor=5; micro=`echo $2 | sed 's/.*\\.//'`;;\n    1.6|1.6-*) minor=6; micro=0;;\n    1.6.*)     minor=6; micro=`echo $2 | sed 's/.*\\.//'`;;\n    1.7.*)     minor=7; micro=`echo $2 | sed 's/.*\\.//'`;;\n    1.8|1.8-*) minor=8; micro=0;;\n    1.8.*)     minor=8; micro=`echo $2 | sed 's/.*\\.//'`;;\n    1.9.*)     minor=9; micro=`echo $2 | sed 's/.*\\.//'`;;\n    *)         ww_die \"Bug: unrecognized version $2\";;\nesac\nif test $WW_WINE_MINOR = $minor\nthen\n    test $WW_WINE_MICRO $1 $micro || return 1\nelse\n    test $WW_WINE_MINOR $1 $minor || return 1\nfi"
 wine_version_in\Body="for range\ndo\n  val1=`echo $range | sed 's/,.*//'`\n  val2=`echo $range | sed 's/.*,//'`\n\n  # If in this range, return true\n  case $range in\n  ,*)                                ww_wine_version -le \"$val2\" && unset range val1 val2 && return 0;;\n  *,) ww_wine_version -ge \"$val1\"                                && unset range val1 val2 && return 0;;\n  *)  ww_wine_version -ge \"$val1\" && ww_wine_version -le \"$val2\" && unset range val1 val2 && return 0;;\n  esac\ndone\nunset range val1 val2\nreturn 1"
+wm9codecs\Body=ww_set_winver win2k\nww_cd_repo_wine wm9codecs.exe $WW_UNATTENDED_SLASH_Q
 workaround_wine_bug\Body="case \"$2\" in\n[0-9]*) ww_die \"Bug: want message in ww_workaround_wine_bug arg 2, got $2\" ;;\n\"\") _ww_msg=\"\";;\n*)  _ww_msg=\"-- $2\";;\nesac\nif test \"$3\" && ww_wine_version_in $3 $4 $5 $6\nthen\n    echo Current wine does not have wine bug $1, so not applying workaround\n    return 1\nfi\ncase $LANG in\n    da*) ww_warn \"Arbejder uden om wine-fejl ${1} $_ww_msg\" ;;\n    de*) ww_warn \"Wine-Fehler ${1} wird umgegangen $_ww_msg\" ;;\n    pl*) ww_warn \"Obchodzenie b\x142\x119\x64u w wine ${1} $_ww_msg\" ;;\n    ru*) ww_warn \"\x41e\x431\x445\x43e\x434 \x43e\x448\x438\x431\x43a\x438 ${1} $_ww_msg\" ;;\n    uk*) ww_warn \"\x41e\x431\x445\x456\x434 \x43f\x43e\x43c\x438\x43b\x43a\x438 ${1} $_ww_msg\" ;;\n    zh_CN*) ww_warn \"\x7ed5\x8fc7 wine bug ${1} $_ww_msg\" ;;\n    zh_TW*|zh_HK*) ww_warn \"\x7e5e\x904e wine bug ${1} $_ww_msg\" ;;\n    *) ww_warn \"Working around wine bug ${1} $_ww_msg\" ;;\nesac\nreturn 0"
 xpsp3_helper\Body="filename=$1\nww_cabextract -d \"$WW_TEMP\" -L -F $filename \"$WW_CACHE\"/xpsp3.exe"
 
@@ -3222,9 +3223,7 @@ winver_winxp\Category=Windows Version
 winver_winxp\Check=false
 winver_winxp\Help=Set windows version to Windows XP
 winver_winxp\Install=ww_set_winver winxp
-wm9codecs\Check=false
 wm9codecs\Files=wm9codecs.exe
-wm9codecs\Install=ww_set_winver win2k\nww_cd_repo_wine wm9codecs.exe $WW_UNATTENDED_SLASH_Q
 wm9codecs\Type=2
 wmi\Check=ww_native \"$WW_SYSTEM32/wbem/wbemcore.dll\"
 wmi\Files=wmi.exe
@@ -3233,12 +3232,12 @@ wmi\Install="ww_set_winver win98\nww_override native,builtin wbemprox wmiutils\n
 wmp10\Check=ww_native \"$WW_SYSTEM32/l3codecp.acm\"
 wmp10\Files=wmp10.exe
 wmp10\Help=Windows Media Player 10
-wmp10\Install=ww_install wsh57\n\nww_cd_repo_wine wmp10.exe $WW_UNATTENDED_SLASH_Q\n\nww_regedit /D \"HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Services\\Cdr4_2K\"\nww_regedit /D \"HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Services\\Cdralw2k\"\n\nww_install wm9codecs\n\nww_unset_winver
+wmp10\Install=ww_install wsh57\n\nww_cd_repo_wine wmp10.exe $WW_UNATTENDED_SLASH_Q\n\nww_regedit /D \"HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Services\\Cdr4_2K\"\nww_regedit /D \"HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Services\\Cdralw2k\"\n\nww_wm9codecs\n\nww_unset_winver
 wmp10\Required=wsh57, wm9codecs
 wmp9\Check=ww_native \"$WW_SYSTEM32\"/l3codeca.acm
 wmp9\Files=wmp9.exe
 wmp9\Help=Windows Media Player 9
-wmp9\Install=ww_install wsh57\n\nww_set_winver win2k\n\nrm -f \"$WW_SYSTEM32\"/wmvcore.dll \"$WW_SYSTEM32\"/wmp.dll\nww_override native wmp\n\nww_override_app wmp9.exe native pidgen\n\nww_cd_repo_wine wmp9.exe $WW_UNATTENDED_SLASH_Q\n\nww_install wm9codecs\n\nww_unset_winver
+wmp9\Install=ww_install wsh57\n\nww_set_winver win2k\n\nrm -f \"$WW_SYSTEM32\"/wmvcore.dll \"$WW_SYSTEM32\"/wmp.dll\nww_override native wmp\n\nww_override_app wmp9.exe native pidgen\n\nww_cd_repo_wine wmp9.exe $WW_UNATTENDED_SLASH_Q\n\nww_wm9codecs\n\nww_unset_winver
 wmp9\Required=wsh57, wm9codecs
 wsh56js\Check=ww_exists ww_native \"$WW_WINDOWS/inf/jscren.inf\"
 wsh56js\Files=wsh56js.exe
