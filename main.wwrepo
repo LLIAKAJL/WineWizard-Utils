@@ -2197,6 +2197,7 @@ xpsp3_helper\Body="filename=$1\nww_cabextract -d \"$WW_TEMP\" -L -F $filename \"
 1.9.10\Files=1.9.10.pol
 1.9.10\Type=1
 1.9.11\Files=1.9.11.pol
+1.9.11\Type=1
 1.9.2-staging\Files=1.9.2-staging.pol
 1.9.2-staging\Type=1
 1.9.2\Files=1.9.2.pol
@@ -3696,6 +3697,7 @@ xvid\Required=vcrun6
 1.9.10\Files=x64.1.9.10.pol
 1.9.10\Type=1
 1.9.11\Files=x64.1.9.11.pol
+1.9.11\Type=1
 1.9.2-staging\Files=x64.1.9.2-staging.pol
 1.9.2-staging\Type=1
 1.9.2\Files=x64.1.9.2.pol
