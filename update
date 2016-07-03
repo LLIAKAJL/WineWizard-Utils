@@ -1,12 +1,1 @@
-[General]
-Version=1.1
-[Packages]
-urls=1
-errors=1
-functions-sh=1
-hashes=1
-packages-sh=1
-required=1
-urls=1
-variables-sh=1
-versions=1
+{"version":"2.0.0","32":"76146fc5ead0517fc20a7dc8f8ba057ca4c82d08","64":"10b6a13f92d211652d0918e9a6ddaed711df19a0"}
