@@ -1,0 +1,1339 @@
+#---------------------------------------------------------------------------------------
+#                                       FUNCTIONS                                       
+#---------------------------------------------------------------------------------------
+
+ww_ahk()
+{
+if ! ww_exists "$WW_TEMP/AutoHotkey.exe"
+then
+  ww_unzip "$WW_TEMP" "$WW_CACHE/ahk.zip" AutoHotkey.exe AU3_Spy.exe
+  chmod +x "$WW_TEMP/AutoHotkey.exe"
+fi
+
+WW_CR=`printf \\\\r`
+cat <<_EOF_ | sed "s/\$/$WW_CR/" > "$WW_TEMP"/tmp.ahk
+$@
+_EOF_
+ww_wine "$WW_TEMP_WIN\\AutoHotkey.exe" "$WW_TEMP_WIN\\tmp.ahk"
+unset WW_CR
+}
+
+#---------------------------------------------------------------------------------------
+
+ww_cabextract()
+{
+if test ! -x "`which cabextract 2>/dev/null`"
+then
+  ww_die "Cannot find cabextract. Please install it (e.g. 'sudo apt-get install cabextract' or 'sudo yum install cabextract')."
+fi
+ww_try cabextract -q "$@"
+}
+
+#---------------------------------------------------------------------------------------
+
+ww_cd()
+{
+ww_try cd "$@"
+}
+
+#---------------------------------------------------------------------------------------
+
+ww_cd_repo()
+{
+ww_cd "$WW_CACHE"
+}
+
+#---------------------------------------------------------------------------------------
+
+ww_cd_repo_wine()
+{
+ww_cd_repo
+ww_wine "$@"
+}
+
+#---------------------------------------------------------------------------------------
+
+ww_clear_temp()
+{
+test -d "$WW_WINDOWS"/Temp && rm -rf "$WW_WINDOWS"/Temp
+test -d "$WW_TEMP" && rm -rf "$WW_TEMP"
+mkdir -p "$WW_TEMP"
+}
+
+#---------------------------------------------------------------------------------------
+
+ww_cp()
+{
+ww_try cp -f "$@"
+}
+
+#---------------------------------------------------------------------------------------
+
+ww_create_prefix()
+{
+ww_download 76dd113ccf85803542c8c2fac421ea5a593e7404 'winemenubuilder.exe' 'https://github.com/LLIAKAJL/WineWizard-Utils/blob/master/winemenubuilder/winemenubuilder.exe?raw=true' ''
+ww_download 3b3bdda009eed09fbb6dcac85b0bd618b16965f8 'winemenubuilder64.exe' 'https://github.com/LLIAKAJL/WineWizard-Utils/blob/master/winemenubuilder/winemenubuilder64.exe?raw=true' ''
+wineboot -u
+wineserver -w
+cd "$WINEPREFIX"
+mkdir ".documents"
+cd "dosdevices/c:/users/$USER"
+for f in *
+do
+    if [ -h "$f" ]
+    then
+        mkdir "$WINEPREFIX/.documents/$f"
+        rm "$f"
+        ln -s "../../../.documents/$f" "$f"
+    fi
+done
+rm "$WW_SYSTEM32"/winemenubuilder.exe
+ww_cp "$WW_CACHE"/winemenubuilder.exe "$WW_SYSTEM32"
+rm "$WW_SYSTEM64"/winemenubuilder.exe
+ww_cp "$WW_CACHE"/winemenubuilder64.exe "$WW_SYSTEM64"/winemenubuilder.exe
+}
+
+#---------------------------------------------------------------------------------------
+
+ww_d3dx_helper()
+{
+dllname=$1
+ww_cabextract -d "$WW_TEMP" -L -F "*$dllname*x86*" "$WW_DX_FEB_PATH"
+for x in "$WW_TEMP"/*.cab
+do
+  ww_cabextract -d "$WW_SYSTEM32" -L -F "$dllname.dll" "$x"
+done
+ww_cabextract -d "$WW_TEMP" -L -F "*$dllname*x64*" "$WW_DX_FEB_PATH"
+for x in "$WW_TEMP"/*x64.cab
+do
+  ww_cabextract -d "$WW_SYSTEM64" -L -F "$dllname.dll" "$x"
+done
+ww_override native $dllname
+}
+
+#---------------------------------------------------------------------------------------
+
+ww_die()
+{
+ww_warn "$@"
+exit 1
+}
+
+#---------------------------------------------------------------------------------------
+
+ww_done()
+{
+ww_clear_temp
+}
+
+#---------------------------------------------------------------------------------------
+
+ww_download()
+{
+local WW_SUM=$1
+shift
+local WW_OUT="$WW_CACHE"/$1
+shift
+if test -f "$WW_OUT"
+then
+    local WW_GOTSUM=$(ww_sha1sum "$WW_OUT" | sed 's/ .*//')
+    test "$WW_SUM" = "$WW_GOTSUM" && return 0
+fi
+while test "$1" != ""
+do
+    WW_URL=$1
+    shift
+    WW_RE=$1
+    shift
+    wget --no-check-certificate "$WW_URL" -O "$WW_OUT" 2>&1
+    WW_URL=''
+    test -z "$WW_RE" || WW_URL=$(cat $WW_OUT | sed -n "s/$WW_RE/\1/p")
+    test -z "$WW_URL" || wget -O "$WW_OUT" --no-check-certificate $WW_URL 2>&1
+    if test -f "$WW_OUT"
+    then
+        local WW_GOTSUM=$(ww_sha1sum "$WW_OUT" | sed 's/ .*//')
+        if [ "$WW_SUM" = "$WW_GOTSUM" ]
+        then
+            return 0
+        fi
+    fi
+done
+ww_die "Download error!"
+}
+
+#---------------------------------------------------------------------------------------
+
+ww_droid_helper()
+{
+ww_cp "$WW_CACHE"/$1 "$WW_FONTS"
+ww_register_font $1 "$2"
+}
+
+#---------------------------------------------------------------------------------------
+
+ww_dx_feb2010_download()
+{
+ww_download a97c820915dc20929e84b49646ec275760012a42 'directx9.feb2010.exe' 'http://download.microsoft.com/download/E/E/1/EE17FF74-6C45-4575-9CF4-7FC2597ACD18/directx_feb2010_redist.exe' ''
+}
+
+#---------------------------------------------------------------------------------------
+
+ww_dx_jun2010_download()
+{
+ww_download f8f1217f666bf2f6863631a7d5e5fb3a8d1542df 'directx9.jun2010.exe' 'http://download.microsoft.com/download/8/4/A/84A35BF1-DAFE-4AE8-82AF-AD2AE20B6B14/directx_Jun2010_redist.exe' ''
+}
+
+#---------------------------------------------------------------------------------------
+
+ww_early_wine()
+{
+WINEDEBUG=-all wine "$@" 2> /dev/null | ( sed 's/.*1h.=//' | tr -d '\r' | grep -v "Module not found" || true)
+}
+
+#---------------------------------------------------------------------------------------
+
+ww_exists()
+{
+test -f "$1"
+}
+
+#---------------------------------------------------------------------------------------
+
+ww_fontfix()
+{
+if ww_exists /usr/share/fonts/truetype/arphic/ukai.ttf
+then
+    local gotsum=$(ww_sha1sum /usr/share/fonts/truetype/arphic/ukai.ttf)
+    if [ "$gotsum"x = "96e1121f89953e5169d3e2e7811569148f573985"x ]
+    then
+        ww_die "Your installed ukai.ttf is known to be broken. Upgrade your ttf-arphic font package!"
+    fi
+fi
+if ww_exists /usr/share/fonts/truetype/arphic/uming.ttf
+then
+    local gotsum=$(ww_sha1sum /usr/share/fonts/truetype/arphic/uming.ttf)
+    if [ "$gotsum"x = "2a4f4a69e343c21c24d044b2cb19fd4f0decc82c"x ]
+    then
+        ww_die "Your installed uming.ttf is known to be broken. Upgrade your ttf-uming font package!"
+    fi
+fi
+if xlsfonts 2>/dev/null | egrep -i "samyak.*oriya"
+then
+    ww_die "Please uninstall the Samyak/Oriya font, e.g. 'sudo dpkg -r ttf-oriya-fonts', then log out and log in again.  That font causes strange crashes in .net programs."
+fi
+}
+
+#---------------------------------------------------------------------------------------
+
+ww_info()
+{
+echo "------------------------------------------------------"
+echo "$@"
+echo "------------------------------------------------------"
+}
+
+#---------------------------------------------------------------------------------------
+
+ww_init()
+{
+if [ -z "$WW_SCREEN_RES" ]
+then
+    WW_SCREEN_RES=$(xrandr -q | awk -F'current' -F',' 'NR==1 {gsub("( |current)","");print $2}')
+fi
+if [ -z "$WW_VMEMORY_SIZE" ]
+then
+    WW_VMEMORY_SIZE="default"
+fi
+
+XDG_CACHE_HOME="${XDG_CACHE_HOME:-$HOME/.cache}"
+WW_CACHE="$XDG_CACHE_HOME/Wine Wizard Project/Wine Wizard"
+WW_C="$WINEPREFIX/dosdevices/c:"
+WW_WINDOWS="$WW_C/windows"
+
+WW_SYSTEM32="$WW_WINDOWS/syswow64"
+WW_SYSTEM32_WIN="C:\\windows\\syswow64"
+WW_SYSTEM64="$WW_WINDOWS/system32"
+WW_SYSTEM64_WIN="C:\\windows\\system32"
+ww_warn "You are using a 64-bit WINEPREFIX. If you encounter problems, please retest in a clean 32-bit WINEPREFIX before reporting a bug."
+
+WW_PROGRAM_FILES="$WW_C/Program Files"
+WW_PROGRAM_FILES_X86="$WW_PROGRAM_FILES (x86)"
+
+WW_FONTS="$WW_WINDOWS/Fonts"
+WW_TEMP="$WW_WINDOWS/temp"
+WW_TEMP_WIN="C:\\windows\\temp"
+WW_COMMON_FILES="$WW_PROGRAM_FILES/Common Files"
+
+WW_UNATTENDED_DASH_Q="-q"
+WW_UNATTENDED_SLASH_Q="/q"
+WW_UNATTENDED_SLASH_QB="/qb"
+WW_UNATTENDED_SLASH_QN="/qn"
+WW_UNATTENDED_SLASH_QNT="/qnt"
+WW_UNATTENDED_SLASH_QT="/qt"
+WW_UNATTENDED_SLASH_QUIET="/quiet"
+WW_UNATTENDED_SLASH_S="/S"
+WW_UNATTENDED_DASH_SILENT="-silent"
+WW_UNATTENDED_SLASH_SILENT="/silent"
+
+case "$WW_WINE_VERSION" in
+    1.4-*)     WW_WINE_VERSION="1.4.40"; export WW_WINE_VERSION;;
+    1.4)       WW_WINE_VERSION="1.4.0";  export WW_WINE_VERSION;;
+    1.6-*)     WW_WINE_VERSION="1.6.0";  export WW_WINE_VERSION;;
+    1.6)       WW_WINE_VERSION="1.6.0";  export WW_WINE_VERSION;;
+    1.8-*)     WW_WINE_VERSION="1.8.0";  export WW_WINE_VERSION;;
+    1.8)       WW_WINE_VERSION="1.8.0";  export WW_WINE_VERSION;;
+esac
+WW_WINE_MINOR=`echo $WW_WINE_VERSION | sed 's/1\.\([0-9]*\)\..*/\1/'`
+WW_WINE_MICRO=`echo $WW_WINE_VERSION | sed 's/1.[0-9][0-9]*\.\([0-9]*\).*/\1/'`
+
+WW_DX_FEB_PATH="$WW_CACHE"/directx9.feb2010.exe
+WW_DX_JUN_PATH="$WW_CACHE"/directx9.jun2010.exe
+}
+
+#---------------------------------------------------------------------------------------
+
+ww_install()
+{
+package=$1
+ww_download_$package
+ww_check_$package && return
+ww_clear_temp
+ww_info "Package installation: $package ..."
+ww_install_$package
+}
+
+#---------------------------------------------------------------------------------------
+
+ww_install_wine()
+{
+test -f "$WW_CACHE"/wslin64 && rm "$WW_CACHE"/wslin64
+wget 'https://www.playonlinux.com/wine/binaries/linux-amd64.lst' -O "$WW_CACHE"/wslin64 2>&1
+csum=$(ww_wine_checksum "$WW_WINE_VERSION")
+rm "$WW_CACHE"/wslin64
+ww_download $csum "x64.$WW_WINE_VERSION.pol" "https://www.playonlinux.com/wine/binaries/linux-amd64/PlayOnLinux-wine-$WW_WINE_VERSION-linux-amd64.pol" ''
+test -d "$WINEPREFIX" || mkdir "$WINEPREFIX"
+ww_cd "$WINEPREFIX"
+test -d "$WINEPREFIX"/.wine && rm -rf "$WINEPREFIX/.wine"
+tar xvjf "$WW_CACHE/x64.$WW_WINE_VERSION.pol"
+mv wineversion/* "$WINEPREFIX/.wine"
+rm -rf files
+rm -rf playonlinux
+rm -rf wineversion
+
+}
+
+#---------------------------------------------------------------------------------------
+
+ww_killall()
+{
+kill -s KILL `pgrep $1`
+}
+
+#---------------------------------------------------------------------------------------
+
+ww_mv()
+{
+ww_try mv "$@"
+}
+
+#---------------------------------------------------------------------------------------
+
+ww_native()
+{
+ww_exists "$1" && ! grep -q "Wine placeholder DLL" "$1"
+}
+
+#---------------------------------------------------------------------------------------
+
+ww_override()
+{
+mode=$1
+shift
+echo Using $mode override for following DLLs: $@
+cat > "$WW_TEMP"/override-dll.reg <<_EOF_
+REGEDIT4
+
+[HKEY_CURRENT_USER\Software\Wine\DllOverrides]
+_EOF_
+ww_override_helper "$@"
+unset mode
+}
+
+#---------------------------------------------------------------------------------------
+
+ww_override_app()
+{
+app=$1
+shift
+mode=$1
+shift
+echo Using $mode override for following DLLs when running $app: $@
+(
+    echo REGEDIT4
+    echo ""
+    echo "[HKEY_CURRENT_USER\\Software\\Wine\\AppDefaults\\$app\\DllOverrides]"
+) > "$WW_TEMP"/override-dll.reg
+ww_override_helper "$@"
+unset app mode
+}
+
+#---------------------------------------------------------------------------------------
+
+ww_override_helper()
+{
+case $mode in
+    native,builtin) mode='"native,builtin"' ;;
+    native)         mode='"native"' ;;
+    builtin)        mode='"builtin"' ;;
+    default)        mode=- ;;
+    disabled)       mode='""' ;;
+    *) ww_die "Bug: unknown override $mode. (want native, builtin, default, or disabled)." ;;
+esac
+while test "$1" != ""
+do
+    [ "$1" = comctl32 ] && rm -rf "$WW_WINDOWS"/winsxs/manifests/x86_microsoft.windows.common-controls_6595b64144ccf1df_6.0.2600.2982_none_deadbeef.manifest
+    echo "\"*$1\"=$mode" >> "$WW_TEMP"/override-dll.reg
+    shift
+done
+ww_regedit "$WW_TEMP_WIN"\\override-dll.reg
+rm "$WW_TEMP"/override-dll.reg
+}
+
+#---------------------------------------------------------------------------------------
+
+ww_regedit()
+{
+ww_try ww_early_wine regedit $WW_UNATTENDED_SLASH_S "$@"
+}
+
+#---------------------------------------------------------------------------------------
+
+ww_register_font()
+{
+file=$1
+shift
+font=$1
+
+case "$file" in
+    *.TTF|*.ttf) font="$font (TrueType)";;
+esac
+
+cat > "$WW_TEMP"/_register-font.reg <<_EOF_
+REGEDIT4
+
+[HKEY_LOCAL_MACHINE\Software\Microsoft\Windows NT\CurrentVersion\Fonts]
+"$font"="$file"
+_EOF_
+
+ww_regedit "$WW_TEMP_WIN"\\_register-font.reg
+
+cat > "$WW_TEMP"/_register-font.reg <<_EOF_
+REGEDIT4
+
+[HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\Fonts]
+"$font"="$file"
+_EOF_
+
+ww_regedit "$WW_TEMP_WIN"\\_register-font.reg
+}
+
+#---------------------------------------------------------------------------------------
+
+ww_register_font_replacement()
+{
+_ww_alias=$1
+shift
+_ww_font=$1
+cat > "$WW_TEMP"/_register-font-replacements.reg <<_EOF_
+REGEDIT4
+
+[HKEY_CURRENT_USER\Software\Wine\Fonts\Replacements]
+"$_ww_alias"="$_ww_font"
+_EOF_
+ww_regedit "$WW_TEMP_WIN"\\_register-font-replacements.reg
+unset _ww_alias _ww_font
+}
+
+#---------------------------------------------------------------------------------------
+
+ww_regsvr()
+{
+ww_wine regsvr32 $WW_UNATTENDED_SLASH_S "$@"
+}
+
+#---------------------------------------------------------------------------------------
+
+ww_remove_mono()
+{
+mono_uuid="`wine uninstaller --list | grep Mono | cut -f1 -d\|`"
+if test "$mono_uuid"
+then
+     wine uninstaller --remove $mono_uuid
+else
+    ww_warn "Mono does not appear to be installed."
+fi
+}
+
+#---------------------------------------------------------------------------------------
+
+ww_setup()
+{
+if [ -d "$WW_WORK_DIR" ]
+then
+    cd "$WW_WORK_DIR"
+fi
+echo "$WW_ARGS" | xargs wine start /Unix "$WW_EXE"
+wineserver -w
+}
+
+#---------------------------------------------------------------------------------------
+
+ww_set_fontsmooth()
+{
+case $1 in
+    disable)   FontSmoothing=0; FontSmoothingOrientation=1; FontSmoothingType=0;;
+    gray|grey) FontSmoothing=2; FontSmoothingOrientation=1; FontSmoothingType=1;;
+    bgr)       FontSmoothing=2; FontSmoothingOrientation=0; FontSmoothingType=2;;
+    rgb)       FontSmoothing=2; FontSmoothingOrientation=1; FontSmoothingType=2;;
+    *) ww_die "unknown font smoothing type $1";;
+esac
+
+echo "Setting font smoothing to $1"
+
+cat > "$WW_TEMP"/fontsmooth.reg <<_EOF_
+REGEDIT4
+
+[HKEY_CURRENT_USER\Control Panel\Desktop]
+"FontSmoothing"="$FontSmoothing"
+"FontSmoothingGamma"=dword:00000578
+"FontSmoothingOrientation"=dword:0000000$FontSmoothingOrientation
+"FontSmoothingType"=dword:0000000$FontSmoothingType
+
+_EOF_
+ww_regedit "$WW_TEMP_WIN"\\fontsmooth.reg
+}
+
+#---------------------------------------------------------------------------------------
+
+ww_set_grabfullscreen()
+{
+case $1 in
+    y|n) arg=$1;;
+    *) ww_die "illegal value $1 for GrabFullscreen";;
+esac
+
+echo "Setting GrabFullscreen to $arg"
+cat > "$WW_TEMP"/set-gfs.reg <<_EOF_
+REGEDIT4
+
+[HKEY_CURRENT_USER\Software\Wine\X11 Driver]
+"GrabFullscreen"="$arg"
+
+_EOF_
+ww_regedit "$WW_TEMP_WIN"\\set-gfs.reg
+}
+
+#---------------------------------------------------------------------------------------
+
+ww_set_hidewineexports()
+{
+case $1 in
+    enable) local registry_value="\"Y\"" ;;
+    disable) local registry_value="-" ;;
+    *) ww_die "Unexpected argument, $arg";;
+esac
+
+cat > "$WW_TEMP"/set-wineexports.reg <<_EOF_
+REGEDIT4
+
+[HKEY_CURRENT_USER\Software\Wine]
+"HideWineExports"=$registry_value
+
+_EOF_
+ww_regedit "$WW_TEMP_WIN"\\set-wineexports.reg
+}
+
+#---------------------------------------------------------------------------------------
+
+ww_set_mwo()
+{
+case $1 in
+    enable*) arg=enabled;;
+    disable*) arg=disable;;
+    force) arg=force;;
+    *) ww_die "illegal value $1 for MouseWarpOverride";;
+esac
+
+echo "Setting MouseWarpOverride to $arg"
+cat > "$WW_TEMP"/set-mwo.reg <<_EOF_
+REGEDIT4
+
+[HKEY_CURRENT_USER\Software\Wine\DirectInput]
+"MouseWarpOverride"="$arg"
+
+_EOF_
+ww_regedit "$WW_TEMP_WIN"\\set-mwo.reg
+}
+
+#---------------------------------------------------------------------------------------
+
+ww_set_sound()
+{
+echo "Setting sound driver to $1"
+cat > "$WW_TEMP"/set-sound.reg <<_EOF_
+REGEDIT4
+
+[HKEY_CURRENT_USER\Software\Wine\Drivers]
+"Audio"="$1"
+
+_EOF_
+ww_regedit "$WW_TEMP_WIN"\\set-sound.reg
+}
+
+#---------------------------------------------------------------------------------------
+
+ww_set_videomemorysize()
+{
+size=$1
+echo "Setting video memory size to $size"
+
+case $size in
+    default)
+        cat > "$WW_TEMP"/set-video.reg <<_EOF_
+REGEDIT4
+
+[HKEY_CURRENT_USER\Software\Wine\Direct3D]
+"VideoMemorySize"=-
+
+_EOF_
+    ;;
+    *)
+	    cat > "$WW_TEMP"/set-video.reg <<_EOF_
+REGEDIT4
+
+[HKEY_CURRENT_USER\Software\Wine\Direct3D]
+"VideoMemorySize"="$size"
+
+_EOF_
+esac
+ww_regedit "$WW_TEMP_WIN"\\set-video.reg
+}
+
+#---------------------------------------------------------------------------------------
+
+ww_set_virtual_desktop()
+{
+desktop=$1
+case $desktop in
+    off)
+        cat > "$WW_TEMP"/vd.reg <<_EOF_
+REGEDIT4
+
+[HKEY_CURRENT_USER\Software\Wine\Explorer]
+"Desktop"=-
+[HKEY_CURRENT_USER\Software\Wine\Explorer\Desktops]
+"Default"=-
+
+_EOF_
+        ;;
+    on)
+        cat > "$WW_TEMP"/vd.reg <<_EOF_
+REGEDIT4
+
+[HKEY_CURRENT_USER\Software\Wine\Explorer]
+"Desktop"="Default"
+[HKEY_CURRENT_USER\Software\Wine\Explorer\Desktops]
+"Default"="$2"
+
+_EOF_
+        ;;
+esac
+ww_regedit "$WW_TEMP_WIN"\\vd.reg
+}
+
+#---------------------------------------------------------------------------------------
+
+ww_set_windowmanagerdecorated()
+{
+case $1 in
+    y|n) arg=$1;;
+    *) ww_die "illegal value $1 for Decorated";;
+esac
+
+echo "Setting Decorated to $arg"
+cat > "$WW_TEMP"/set-wmd.reg <<_EOF_
+REGEDIT4
+
+[HKEY_CURRENT_USER\Software\Wine\X11 Driver]
+"Decorated"="$arg"
+
+_EOF_
+ww_regedit "$WW_TEMP_WIN"\\set-wmd.reg
+}
+
+#---------------------------------------------------------------------------------------
+
+ww_set_windowmanagermanaged()
+{
+case $1 in
+    y|n) arg=$1;;
+    *) ww_die "illegal value $1 for Managed";;
+esac
+
+echo "Setting Managed to $arg"
+cat > "$WW_TEMP"/set-wmm.reg <<_EOF_
+REGEDIT4
+
+[HKEY_CURRENT_USER\Software\Wine\X11 Driver]
+"Managed"="$arg"
+
+_EOF_
+ww_regedit "$WW_TEMP_WIN\\set-wmm.reg"
+}
+
+#---------------------------------------------------------------------------------------
+
+ww_set_wined3d_var()
+{
+case $2 in
+    disable*) arg=disabled;;
+    enable*)  arg=enabled;;
+    hard*)    arg=hardware;;
+    repack)   arg=repack;;
+    backbuffer|fbo|gdi|none|opengl|readdraw|readtex|texdraw|textex|auto) arg=$2;;
+    [0-9]*)   arg=$2;;
+    *) ww_die "illegal value $2 for $1";;
+esac
+echo "Setting Direct3D/$1 to $arg"
+cat > "$WW_TEMP"/set-wined3d.reg <<_EOF_
+REGEDIT4
+
+[HKEY_CURRENT_USER\Software\Wine\Direct3D]
+"$1"="$arg"
+
+_EOF_
+ww_regedit "$WW_TEMP_WIN\\set-wined3d.reg"
+}
+
+#---------------------------------------------------------------------------------------
+
+ww_set_winver()
+{
+(
+    wine reg delete "HKLM\Software\Microsoft\Windows\CurrentVersion" /v SubVersionNumber /f || true
+    wine reg delete "HKLM\Software\Microsoft\Windows\CurrentVersion" /v VersionNumber /f || true
+    wine reg delete "HKLM\Software\Microsoft\Windows NT\CurrentVersion" /v CSDVersion /f || true
+    wine reg delete "HKLM\Software\Microsoft\Windows NT\CurrentVersion" /v CurrentBuildNumber /f || true
+    wine reg delete "HKLM\Software\Microsoft\Windows NT\CurrentVersion" /v CurrentVersion /f || true
+    wine reg delete "HKLM\System\CurrentControlSet\Control\ProductOptions" /v ProductType /f || true
+    wine reg delete "HKLM\System\CurrentControlSet\Control\ServiceCurrent" /v OS /f || true
+    wine reg delete "HKLM\System\CurrentControlSet\Control\Windows" /v CSDVersion /f || true
+    wine reg delete "HKCU\Software\Wine" /v Version /f || true
+    wine reg delete "HKLM\\System\\CurrentControlSet\\Control\\ProductOptions" /v ProductType /f || true
+) > /dev/null 2>&1
+
+    case $1 in
+    win31)
+        echo "Setting Windows version to $1"
+        cat > "$WW_TEMP"/set-winver.reg <<_EOF_
+REGEDIT4
+
+[HKEY_USERS\S-1-5-4\Software\Wine]
+"Version"="win31"
+
+_EOF_
+        ww_regedit "$WW_TEMP_WIN"\\set-winver.reg
+        return
+        ;;
+    win95)
+        echo "Setting Windows version to $1"
+        cat > "$WW_TEMP"/set-winver.reg <<_EOF_
+REGEDIT4
+
+[HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion]
+"ProductName"="Microsoft Windows 95"
+"SubVersionNumber"=""
+"VersionNumber"="4.0.950"
+
+_EOF_
+        ww_regedit "$WW_TEMP_WIN"\\set-winver.reg
+        return
+        ;;
+    win98)
+        echo "Setting Windows version to $1"
+        cat > "$WW_TEMP"/set-winver.reg <<_EOF_
+REGEDIT4
+
+[HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion]
+"ProductName"="Microsoft Windows 98"
+"SubVersionNumber"=" A "
+"VersionNumber"="4.10.2222"
+
+_EOF_
+        ww_regedit "$WW_TEMP_WIN"\\set-winver.reg
+        return
+        ;;
+    nt40)
+        echo "Setting Windows version to $1"
+        cat > "$WW_TEMP"/set-winver.reg <<_EOF_
+REGEDIT4
+
+[HKEY_LOCAL_MACHINE\Software\Microsoft\Windows NT\CurrentVersion]
+"CSDVersion"="Service Pack 6a"
+"CurrentBuildNumber"="1381"
+"CurrentVersion"="4.0"
+
+[HKEY_LOCAL_MACHINE\System\CurrentControlSet\Control\ProductOptions]
+"ProductType"="WinNT"
+
+[HKEY_LOCAL_MACHINE\System\CurrentControlSet\Control\ServiceCurrent]
+"OS"="Windows_NT"
+
+[HKEY_LOCAL_MACHINE\System\CurrentControlSet\Control\Windows]
+"CSDVersion"=dword:00000600
+
+_EOF_
+        ww_regedit "$WW_TEMP_WIN"\\set-winver.reg
+        return
+        ;;
+    win2k)
+        csdversion="Service Pack 4"
+        currentbuildnumber="2195"
+        currentversion="5.0"
+        csdversion_hex=dword:00000400
+        ;;
+    winxp)
+        csdversion="Service Pack 3"
+        currentbuildnumber="2600"
+        currentversion="5.1"
+        csdversion_hex=dword:00000300
+        ;;
+    win2k3)
+        csdversion="Service Pack 2"
+        currentbuildnumber="3790"
+        currentversion="5.2"
+        csdversion_hex=dword:00000200
+        wine reg add "HKLM\\System\\CurrentControlSet\\Control\\ProductOptions" /v ProductType /d "ServerNT" /f
+        ;;
+    vista)
+        csdversion="Service Pack 2"
+        currentbuildnumber="6002"
+        currentversion="6.0"
+        csdversion_hex=dword:00000200
+        wine reg add "HKLM\\System\\CurrentControlSet\\Control\\ProductOptions" /v ProductType /d "WinNT" /f
+        ;;
+    win7)
+        csdversion="Service Pack 1"
+        currentbuildnumber="7601"
+        currentversion="6.1"
+        csdversion_hex=dword:00000100
+        wine reg add "HKLM\\System\\CurrentControlSet\\Control\\ProductOptions" /v ProductType /d "WinNT" /f
+        ;;
+    *)
+        ww_die "Invalid Windows version given."
+        ;;
+    esac
+# ------------------- WINDOWS 8 -----------------
+# "CSDVersion"=" "
+# "CurrentBuildNumber"="9200"
+# "CurrentVersion"="6.2"
+# "ProductName"="Microsoft Windows 8"
+# csdversion_hex=dword:00000000
+# -----------------------------------------------
+    echo "Setting Windows version to $1"
+    cat > "$WW_TEMP"/set-winver.reg <<_EOF_
+REGEDIT4
+
+[HKEY_LOCAL_MACHINE\Software\Microsoft\Windows NT\CurrentVersion]
+"CSDVersion"="$csdversion"
+"CurrentBuildNumber"="$currentbuildnumber"
+"CurrentVersion"="$currentversion"
+
+[HKEY_LOCAL_MACHINE\System\CurrentControlSet\Control\Windows]
+"CSDVersion"=$csdversion_hex
+
+_EOF_
+ww_regedit "$WW_TEMP_WIN"\\set-winver.reg
+}
+
+#---------------------------------------------------------------------------------------
+
+ww_sha1sum()
+{
+local WW_FILE="$1"
+if [ -x "`which sha1sum 2>/dev/null`" ]
+then
+    sha1sum < "$WW_FILE" | sed 's/(stdin)= //;s/ .*//'
+elif [ -x "`which openssl 2>/dev/null`" ]
+then
+    openssl dgst -sha1 < "$WW_FILE" | sed 's/(stdin)= //;s/ .*//'
+else
+    ww_die "No sha1sum utility available."
+fi
+}
+
+#---------------------------------------------------------------------------------------
+
+ww_try()
+{
+export WINEDLLOVERRIDES
+printf '%s\n' "Executing $*"
+"$@"
+status=$?
+if test $status -ne 0
+then
+    ww_die "Note: command '$@' returned status $status.  Aborting."
+fi
+}
+
+#---------------------------------------------------------------------------------------
+
+ww_unset_winver()
+{
+ww_set_winver winxp
+}
+
+#---------------------------------------------------------------------------------------
+
+ww_unzip()
+{
+destdir="$1"
+zipfile="$2"
+shift 2
+if test -x "`which unzip 2>/dev/null`"
+then
+    ww_try unzip -o -q -d"$destdir" "$zipfile" "$@"
+else
+    ww_die "Cannot find unzip. Please install it (e.g. 'sudo apt-get install unzip' or 'sudo yum install unzip')."
+fi
+unset destdir zipfile
+}
+
+#---------------------------------------------------------------------------------------
+
+ww_vcrun6_helper()
+{
+if test ! -f "$WW_TEMP"/vcredist.exe
+then
+    ww_wine "$WW_CACHE"/vcrun6.exe "/T:$WW_TEMP_WIN" /c $WW_UNATTENDED_SLASH_Q
+    ww_exists "$WW_TEMP"/vcredist.exe || ww_die vcredist.exe not found
+fi
+}
+
+#---------------------------------------------------------------------------------------
+
+ww_warn()
+{
+echo "------------------------------------------------------" >&2
+echo "$@" >&2
+echo "------------------------------------------------------" >&2
+}
+
+#---------------------------------------------------------------------------------------
+
+ww_win2ksp4_helper()
+{
+filename=$1
+ww_cabextract -d "$WW_TEMP" -L -F $filename "$WW_CACHE"/win2ksp4.exe
+}
+
+#---------------------------------------------------------------------------------------
+
+ww_win7sp1_helper()
+{
+filename=$1
+ww_cabextract -d "$WW_TEMP" -L -F $filename "$WW_CACHE"/win7sp1.exe
+}
+
+#---------------------------------------------------------------------------------------
+
+ww_wine()
+{
+ww_try wine "$@"
+}
+
+#---------------------------------------------------------------------------------------
+
+ww_wine_checksum()
+{
+test -f "$WW_CACHE"/wslin64 || ww_die "Wine checksum base doesn't found!"
+cat "$WW_CACHE"/wslin64 | grep "$1;" | cut -d';' -f3-
+
+}
+
+#---------------------------------------------------------------------------------------
+
+ww_wine_version()
+{
+case $2 in
+    1.3.*)     minor=3; micro=`echo $2 | sed 's/.*\.//'`;;
+    1.4)       minor=4; micro=0;;
+    1.4.*)     minor=4; micro=`echo $2 | sed 's/.*\.//'`;;
+    1.5.*)     minor=5; micro=`echo $2 | sed 's/.*\.//'`;;
+    1.6|1.6-*) minor=6; micro=0;;
+    1.6.*)     minor=6; micro=`echo $2 | sed 's/.*\.//'`;;
+    1.7.*)     minor=7; micro=`echo $2 | sed 's/.*\.//'`;;
+    1.8|1.8-*) minor=8; micro=0;;
+    1.8.*)     minor=8; micro=`echo $2 | sed 's/.*\.//'`;;
+    1.9.*)     minor=9; micro=`echo $2 | sed 's/.*\.//'`;;
+    *)         ww_die "Bug: unrecognized version $2";;
+esac
+if test $WW_WINE_MINOR = $minor
+then
+    test $WW_WINE_MICRO $1 $micro || return 1
+else
+    test $WW_WINE_MINOR $1 $minor || return 1
+fi
+}
+
+#---------------------------------------------------------------------------------------
+
+ww_wine_version_in()
+{
+for range
+do
+  val1=`echo $range | sed 's/,.*//'`
+  val2=`echo $range | sed 's/.*,//'`
+
+  # If in this range, return true
+  case $range in
+  ,*)                                ww_wine_version -le "$val2" && unset range val1 val2 && return 0;;
+  *,) ww_wine_version -ge "$val1"                                && unset range val1 val2 && return 0;;
+  *)  ww_wine_version -ge "$val1" && ww_wine_version -le "$val2" && unset range val1 val2 && return 0;;
+  esac
+done
+unset range val1 val2
+return 1
+}
+
+#---------------------------------------------------------------------------------------
+
+ww_wm9codecs()
+{
+ww_set_winver win2k
+ww_cd_repo_wine wm9codecs.exe $WW_UNATTENDED_SLASH_Q
+}
+
+#---------------------------------------------------------------------------------------
+
+ww_workaround_wine_bug()
+{
+case "$2" in
+[0-9]*) ww_die "Bug: want message in ww_workaround_wine_bug arg 2, got $2" ;;
+"") _ww_msg="";;
+*)  _ww_msg="-- $2";;
+esac
+if test "$3" && ww_wine_version_in $3 $4 $5 $6
+then
+    echo Current wine does not have wine bug $1, so not applying workaround
+    return 1
+fi
+case $LANG in
+    da*) ww_warn "Arbejder uden om wine-fejl ${1} $_ww_msg" ;;
+    de*) ww_warn "Wine-Fehler ${1} wird umgegangen $_ww_msg" ;;
+    pl*) ww_warn "Obchodzenie błędu w wine ${1} $_ww_msg" ;;
+    ru*) ww_warn "Обход ошибки ${1} $_ww_msg" ;;
+    uk*) ww_warn "Обхід помилки ${1} $_ww_msg" ;;
+    zh_CN*) ww_warn "绕过 wine bug ${1} $_ww_msg" ;;
+    zh_TW*|zh_HK*) ww_warn "繞過 wine bug ${1} $_ww_msg" ;;
+    *) ww_warn "Working around wine bug ${1} $_ww_msg" ;;
+esac
+return 0
+}
+
+#---------------------------------------------------------------------------------------
+
+ww_xpsp3_helper()
+{
+filename=$1
+ww_cabextract -d "$WW_TEMP" -L -F $filename "$WW_CACHE"/xpsp3.exe
+}
+
+#---------------------------------------------------------------------------------------
+#                                       PACKAGES                                        
+#---------------------------------------------------------------------------------------
+
+ww_download_d3dcompiler_43()
+{
+ww_dx_jun2010_download
+}
+
+ww_check_d3dcompiler_43()
+{
+ww_native "$WW_SYSTEM32/d3dcompiler_43.dll"
+}
+
+ww_install_d3dcompiler_43()
+{
+dllname=d3dcompiler_43
+ww_cabextract -d "$WW_TEMP" -L -F "*$dllname*x86*" "$WW_DX_JUN_PATH"
+for x in "$WW_TEMP"/*.cab
+do
+  ww_cabextract -d "$WW_SYSTEM32" -L -F "$dllname.dll" "$x"
+done
+ww_cabextract -d "$WW_TEMP" -L -F "*$dllname*x64*" "$WW_DX_JUN_PATH"
+for x in "$WW_TEMP"/*x64.cab
+do
+  ww_cabextract -d "$WW_SYSTEM64" -L -F "$dllname.dll" "$x"
+done
+ww_override native $dllname
+}
+
+#---------------------------------------------------------------------------------------
+
+ww_download_d3dx10()
+{
+ww_dx_jun2010_download
+}
+
+ww_check_d3dx10()
+{
+ww_native "$WW_SYSTEM32/d3dx10_33.dll"
+}
+
+ww_install_d3dx10()
+{
+ww_cabextract -d "$WW_TEMP" -L -F '*d3dx10*x86*' "$WW_DX_JUN_PATH"
+for x in "$WW_TEMP"/*.cab
+do
+  ww_cabextract -d "$WW_SYSTEM32" -L -F 'd3dx10*.dll' "$x"
+done
+ww_cabextract -d "$WW_TEMP" -L -F '*d3dx10*x64*' "$WW_DX_JUN_PATH"
+for x in "$WW_TEMP"/*x64.cab
+do
+  ww_cabextract -d "$WW_SYSTEM64" -L -F 'd3dx10*.dll' "$x"
+done
+ww_override native d3dx10_33 d3dx10_34 d3dx10_35 d3dx10_36 d3dx10_37
+ww_override native d3dx10_38 d3dx10_39 d3dx10_40 d3dx10_41 d3dx10_42 d3dx10_43
+}
+
+#---------------------------------------------------------------------------------------
+
+ww_download_d3dx11_42()
+{
+ww_dx_jun2010_download
+}
+
+ww_check_d3dx11_42()
+{
+ww_native "$WW_SYSTEM32/d3dx11_42.dll"
+}
+
+ww_install_d3dx11_42()
+{
+dllname=d3dx11_42
+ww_cabextract -d "$WW_TEMP" -L -F "*$dllname*x86*" "$WW_DX_JUN_PATH"
+for x in "$WW_TEMP"/*.cab
+do
+  ww_cabextract -d "$WW_SYSTEM32" -L -F "$dllname.dll" "$x"
+done
+ww_cabextract -d "$WW_TEMP" -L -F "*$dllname*x64*" "$WW_DX_JUN_PATH"
+for x in "$WW_TEMP"/*x64.cab
+do
+  ww_cabextract -d "$WW_SYSTEM64" -L -F "$dllname.dll" "$x"
+done
+ww_override native $dllname
+}
+
+#---------------------------------------------------------------------------------------
+
+ww_download_d3dx11_43()
+{
+ww_dx_jun2010_download
+}
+
+ww_check_d3dx11_43()
+{
+ww_native "$WW_SYSTEM32/d3dx11_43.dll"
+}
+
+ww_install_d3dx11_43()
+{
+dllname=d3dx11_43
+ww_cabextract -d "$WW_TEMP" -L -F "*$dllname*x86*" "$WW_DX_JUN_PATH"
+for x in "$WW_TEMP"/*.cab
+do
+  ww_cabextract -d "$WW_SYSTEM32" -L -F "$dllname.dll" "$x"
+done
+ww_cabextract -d "$WW_TEMP" -L -F "*$dllname*x64*" "$WW_DX_JUN_PATH"
+for x in "$WW_TEMP"/*x64.cab
+do
+  ww_cabextract -d "$WW_SYSTEM64" -L -F "$dllname.dll" "$x"
+done
+ww_override native $dllname
+}
+
+#---------------------------------------------------------------------------------------
+
+ww_download_d3dx9_26()
+{
+ww_dx_feb2010_download
+}
+
+ww_check_d3dx9_26()
+{
+ww_native "$WW_SYSTEM32/d3dx9_26.dll"
+}
+
+ww_install_d3dx9_26()
+{
+ww_d3dx_helper d3dx9_26
+}
+
+#---------------------------------------------------------------------------------------
+
+ww_download_d3dx9_28()
+{
+ww_dx_feb2010_download
+}
+
+ww_check_d3dx9_28()
+{
+ww_native "$WW_SYSTEM32/d3dx9_28.dll"
+}
+
+ww_install_d3dx9_28()
+{
+ww_d3dx_helper d3dx9_28
+}
+
+#---------------------------------------------------------------------------------------
+
+ww_download_d3dx9_31()
+{
+ww_dx_feb2010_download
+}
+
+ww_check_d3dx9_31()
+{
+ww_native "$WW_SYSTEM32/d3dx9_31.dll"
+}
+
+ww_install_d3dx9_31()
+{
+ww_d3dx_helper d3dx9_31
+}
+
+#---------------------------------------------------------------------------------------
+
+ww_download_d3dx9_35()
+{
+ww_dx_feb2010_download
+}
+
+ww_check_d3dx9_35()
+{
+ww_native "$WW_SYSTEM32/d3dx9_35.dll"
+}
+
+ww_install_d3dx9_35()
+{
+ww_d3dx_helper d3dx9_35
+}
+
+#---------------------------------------------------------------------------------------
+
+ww_download_d3dx9_36()
+{
+ww_dx_feb2010_download
+}
+
+ww_check_d3dx9_36()
+{
+ww_native "$WW_SYSTEM32/d3dx9_36.dll"
+}
+
+ww_install_d3dx9_36()
+{
+ww_d3dx_helper d3dx9_36
+}
+
+#---------------------------------------------------------------------------------------
+
+ww_download_d3dx9_39()
+{
+ww_dx_feb2010_download
+}
+
+ww_check_d3dx9_39()
+{
+ww_native "$WW_SYSTEM32/d3dx9_39.dll"
+}
+
+ww_install_d3dx9_39()
+{
+ww_d3dx_helper d3dx9_39
+}
+
+#---------------------------------------------------------------------------------------
+
+ww_download_d3dx9_42()
+{
+ww_dx_feb2010_download
+}
+
+ww_check_d3dx9_42()
+{
+ww_native "$WW_SYSTEM32/d3dx9_42.dll"
+}
+
+ww_install_d3dx9_42()
+{
+ww_d3dx_helper d3dx9_42
+}
+
+#---------------------------------------------------------------------------------------
+
+ww_download_d3dx9_43()
+{
+ww_dx_jun2010_download
+}
+
+ww_check_d3dx9_43()
+{
+ww_native "$WW_SYSTEM32/d3dx9_43.dll"
+}
+
+ww_install_d3dx9_43()
+{
+dllname=d3dx9_43
+ww_cabextract -d "$WW_TEMP" -L -F "*$dllname*x86*" "$WW_DX_JUN_PATH"
+for x in "$WW_TEMP"/*.cab
+do
+  ww_cabextract -d "$WW_SYSTEM32" -L -F "$dllname.dll" "$x"
+done
+ww_cabextract -d "$WW_TEMP" -L -F "*$dllname*x64*" "$WW_DX_JUN_PATH"
+for x in "$WW_TEMP"/*x64.cab
+do
+  ww_cabextract -d "$WW_SYSTEM64" -L -F "$dllname.dll" "$x"
+done
+ww_override native $dllname
+}
+
+#---------------------------------------------------------------------------------------
+#                                         MAIN                                          
+#---------------------------------------------------------------------------------------
+
+WW_WINE_VERSION=$WW_BW
+ww_init
+ww_install_wine
+ww_create_prefix
+for f in $WW_BP
+do
+    ww_install $f
+done
+ww_setup
+if [ $WW_BW != $WW_AW ]
+then
+    WW_WINE_VERSION=$WW_AW
+    ww_init
+    ww_install_wine
+else
+    ww_init
+fi
+for f in $WW_AP
+do
+    ww_install $f
+done
+ww_done
+
