@@ -2,14 +2,19 @@
 #                                       FUNCTIONS                                       
 #---------------------------------------------------------------------------------------
 
+ww_download_edzv()
+{
+ww_download b24bdea53312018df74ef91f0b4d52ded96a41c8 'EDZV.tar.gz' 'http://my-files.ru/Save/2j72sq/EDZV.tar.gz' ''
+}
+
 ww_edzv_preinstall()
 {
 cd "$WW_C"
-wget http://my-files.ru/Save/2j72sq/EDZV.tar.gz -O EDZV.tar.gz 2>&1
-tar -zxvf EDZV.tar.gz
+tar -zxvf "$WW_CACHE"/EDZV.tar.gz
 cd EDZV
 wine start prepare_wine.cmd
 wineserver -w
+rm -rf "$WW_C"/EDZV
 }
 
 ww_edzv_postinstall()
@@ -21,16 +26,17 @@ ww_edzv_postinstall()
 #                                          MAIN                                       
 #---------------------------------------------------------------------------------------
 
-case $1 in
-13668) app_name=edzv
+ww_special_script_execute()
+{
+case "$1" in
+    13668) app_name=edzv
 esac
-
 if [ -n "$app_name" ]
 then
-    echo "$app_name"
-    case "$2" in
-        "pre") ww_"$app_name"_preinstall ;;
-        "post") ww_"$app_name"_postinstall ;;
+    ww_download_"$app_name"
+    case $2 in
+        pre) ww_"$app_name"_preinstall ;;
+        post) ww_"$app_name"_preinstall ;;
     esac
 fi
-unset $app_name
+}
