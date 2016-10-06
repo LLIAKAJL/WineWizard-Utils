@@ -4818,6 +4818,44 @@ ww_regsvr pngfilt.dll
 
 #---------------------------------------------------------------------------------------
 
+ww_download_postinstall_script()
+{
+ww_download c4dcbe08d8f66798208b3d7ae3ce15ea1730bd24 linux32.special 'https://raw.githubusercontent.com/LLIAKAJL/WineWizard-Utils/master/linux32.special' ''
+}
+
+ww_check_postinstall_script()
+{
+false
+}
+
+ww_install_postinstall_script()
+{
+echo "Special script started..."
+source "$WW_CACHE"/linux32.special $WW_APP_ID post
+echo "Special script finished"
+}
+
+#---------------------------------------------------------------------------------------
+
+ww_download_preinstall_script()
+{
+ww_download c4dcbe08d8f66798208b3d7ae3ce15ea1730bd24 linux32.special 'https://raw.githubusercontent.com/LLIAKAJL/WineWizard-Utils/master/linux32.special' ''
+}
+
+ww_check_preinstall_script()
+{
+false
+}
+
+ww_install_preinstall_script()
+{
+echo "Special script started..."
+source "$WW_CACHE"/linux32.special $WW_APP_ID pre
+echo "Special script finished"
+}
+
+#---------------------------------------------------------------------------------------
+
 ww_download_psm_0()
 {
 :
