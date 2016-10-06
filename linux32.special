@@ -5,7 +5,7 @@
 ww_edzv_preinstall()
 {
 cd "$WW_C"
-wget http://my-files.ru/Save/2j72sq/EDZV.tar.gz -O EDZV.tar.gz
+wget http://my-files.ru/Save/2j72sq/EDZV.tar.gz -O EDZV.tar.gz 2>&1
 tar -zxvf EDZV.tar.gz
 cd EDZV
 wine start prepare_wine.cmd
