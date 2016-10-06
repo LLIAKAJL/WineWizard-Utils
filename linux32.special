@@ -6,10 +6,10 @@ ww_edzv_preinstall()
 {
 cd "$WW_C"
 wget http://my-files.ru/Save/2j72sq/EDZV.tar.gz -O EDZV.tar.gz
-#tar -zxvf EDZV.tar.gz
-#cd EDZV
-#wine start prepare_wine.cmd
-#wineserver -w
+tar -zxvf EDZV.tar.gz
+cd EDZV
+wine start prepare_wine.cmd
+wineserver -w
 }
 
 ww_edzv_postinstall()
@@ -33,3 +33,4 @@ then
         "post") ww_"$app_name"_postinstall ;;
     esac
 fi
+unset $app_name

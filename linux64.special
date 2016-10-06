@@ -14,3 +14,4 @@ then
         "post") ww_"$app_name"_postinstall ;;
     esac
 fi
+unset $app_name
