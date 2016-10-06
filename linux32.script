@@ -4831,7 +4831,7 @@ false
 ww_install_postinstall_script()
 {
 echo "Special script started..."
-source "$WW_CACHE"/linux32.special $WW_APP_ID post
+sh "$WW_CACHE"/linux32.special $WW_APP_ID post
 echo "Special script finished"
 }
 
@@ -4850,7 +4850,7 @@ false
 ww_install_preinstall_script()
 {
 echo "Special script started..."
-source "$WW_CACHE"/linux32.special $WW_APP_ID pre
+sh "$WW_CACHE"/linux32.special $WW_APP_ID pre
 echo "Special script finished"
 }
 
