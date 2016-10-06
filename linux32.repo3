@@ -1155,6 +1155,20 @@
             ]
         },
         {
+            "i": 240,
+            "n": "postinstall_script",
+            "c": [
+                0
+            ]
+        },
+        {
+            "i": 239,
+            "n": "preinstall_script",
+            "c": [
+                0
+            ]
+        },
+        {
             "i": 151,
             "n": "psm_0",
             "c": [
