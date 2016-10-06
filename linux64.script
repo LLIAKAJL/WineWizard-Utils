@@ -247,6 +247,7 @@ fi
 
 XDG_CACHE_HOME="${XDG_CACHE_HOME:-$HOME/.cache}"
 WW_CACHE="$XDG_CACHE_HOME/winewizard"
+mkdir -p "$WW_CACHE"
 WW_C="$WINEPREFIX/dosdevices/c:"
 WW_WINDOWS="$WW_C/windows"
 
