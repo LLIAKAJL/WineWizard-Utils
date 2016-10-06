@@ -3678,7 +3678,7 @@ ww_regsvr ir50_32.dll
 ww_download_ie6()
 {
 ww_download 8e483db28ff01a7cabd39147ab6c59753ea1f533 'ie60.exe' 'http://download.oldapps.com/Internet_Explorer/ie60.exe' '' 
-ww_download 4fc3bf0dc96b5cf5ab26430fac1c33c5c50bd142 'msls31.exe' 'http://download.microsoft.com/download/WindowsInstaller/Install/2.0/NT45/EN-US/InstMsiW.exe' '' 
+ww_download 4fc3bf0dc96b5cf5ab26430fac1c33c5c50bd142 'msls31.exe' 'https://web.archive.org/web/20160710055851/http://download.microsoft.com/download/WindowsInstaller/Install/2.0/NT45/EN-US/InstMsiW.exe' '' 
 ww_download 6f5db296ebf58e81c49bc667049a3f88a3f1ec3d 'pngfilt.exe' 'https://web.archive.org/web/20061224003406/http://download.microsoft.com/download/5/0/c/50c42d0e-07a8-4a2b-befb-1a403bd0df96/IE5.01sp4-KB871260-Windows2000sp4-x86-ENU.exe' '' 
 }
 
@@ -3834,7 +3834,7 @@ ww_warn "To start ie7, use the file '${WW_PROGRAM_FILES}/Internet Explorer/iexpl
 ww_download_ie8()
 {
 ww_download e489483e5001f95da04e1ebf3c664173baef3e26 'ie8.exe' 'http://download.microsoft.com/download/C/C/0/CC0BD555-33DD-411E-936B-73AC6F95AE11/IE8-WindowsXP-x86-ENU.exe' '' 
-ww_download 4fc3bf0dc96b5cf5ab26430fac1c33c5c50bd142 'msls31.exe' 'http://download.microsoft.com/download/WindowsInstaller/Install/2.0/NT45/EN-US/InstMsiW.exe' '' 
+ww_download 4fc3bf0dc96b5cf5ab26430fac1c33c5c50bd142 'msls31.exe' 'https://web.archive.org/web/20160710055851/http://download.microsoft.com/download/WindowsInstaller/Install/2.0/NT45/EN-US/InstMsiW.exe' '' 
 ww_download ac8f50dd54d011f3bb1dd79240dae9378748449f 'winetest.cat' 'https://github.com/Winetricks/winetricks/raw/master/files/winetest.cat' '' 
 }
 
@@ -3917,7 +3917,7 @@ ww_download_ie8_kb2936068()
 {
 ww_download e489483e5001f95da04e1ebf3c664173baef3e26 'ie8.exe' 'http://download.microsoft.com/download/C/C/0/CC0BD555-33DD-411E-936B-73AC6F95AE11/IE8-WindowsXP-x86-ENU.exe' '' 
 ww_download 1bdeb741085b8f1ef6efc83f8615121373107347 'ie8_kb2936068.exe' 'https://download.microsoft.com/download/3/8/C/38CE0ABB-01FD-4C0A-A569-BC5E82C34A17/IE8-WindowsXP-KB2936068-x86-ENU.exe' '' 
-ww_download 4fc3bf0dc96b5cf5ab26430fac1c33c5c50bd142 'msls31.exe' 'http://download.microsoft.com/download/WindowsInstaller/Install/2.0/NT45/EN-US/InstMsiW.exe' '' 
+ww_download 4fc3bf0dc96b5cf5ab26430fac1c33c5c50bd142 'msls31.exe' 'https://web.archive.org/web/20160710055851/http://download.microsoft.com/download/WindowsInstaller/Install/2.0/NT45/EN-US/InstMsiW.exe' '' 
 ww_download ac8f50dd54d011f3bb1dd79240dae9378748449f 'winetest.cat' 'https://github.com/Winetricks/winetricks/raw/master/files/winetest.cat' '' 
 }
 
@@ -4362,7 +4362,7 @@ ww_regsvr MSHFLXGD.OCX
 
 ww_download_msls31()
 {
-ww_download 4fc3bf0dc96b5cf5ab26430fac1c33c5c50bd142 'msls31.exe' 'http://download.microsoft.com/download/WindowsInstaller/Install/2.0/NT45/EN-US/InstMsiW.exe' '' 
+ww_download 4fc3bf0dc96b5cf5ab26430fac1c33c5c50bd142 'msls31.exe' 'https://web.archive.org/web/20160710055851/http://download.microsoft.com/download/WindowsInstaller/Install/2.0/NT45/EN-US/InstMsiW.exe' '' 
 }
 
 ww_check_msls31()
@@ -5056,7 +5056,7 @@ fi
 
 ww_download_riched20()
 {
-ww_download 4fc3bf0dc96b5cf5ab26430fac1c33c5c50bd142 'msls31.exe' 'http://download.microsoft.com/download/WindowsInstaller/Install/2.0/NT45/EN-US/InstMsiW.exe' '' 
+ww_download 4fc3bf0dc96b5cf5ab26430fac1c33c5c50bd142 'msls31.exe' 'https://web.archive.org/web/20160710055851/http://download.microsoft.com/download/WindowsInstaller/Install/2.0/NT45/EN-US/InstMsiW.exe' '' 
 ww_download fadea6d94a014b039839fecc6e6a11c20afa4fa8 'win2ksp4.exe' 'ftp://ftp.vcitynet.com/win32/win2k/W2KSP4_EN.EXE' '' 'http://download.microsoft.com/download/E/6/A/E6A04295-D2A8-40D0-A0C5-241BFECD095E/W2KSP4_EN.EXE' '' 'https://web.archive.org/web/20160129053851/http://download.microsoft.com/download/E/6/A/E6A04295-D2A8-40D0-A0C5-241BFECD095E/W2KSP4_EN.EXE' '' 
 }
 
