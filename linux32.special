@@ -1,0 +1,35 @@
+#---------------------------------------------------------------------------------------
+#                                       FUNCTIONS                                       
+#---------------------------------------------------------------------------------------
+
+ww_edzv_preinstall()
+{
+cd "$WW_C"
+wget http://my-files.ru/Save/2j72sq/EDZV.tar.gz -O EDZV.tar.gz
+#tar -zxvf EDZV.tar.gz
+#cd EDZV
+#wine start prepare_wine.cmd
+#wineserver -w
+}
+
+ww_edzv_postinstall()
+{
+:
+}
+
+#---------------------------------------------------------------------------------------
+#                                          MAIN                                       
+#---------------------------------------------------------------------------------------
+
+case $1 in
+13668) app_name=edzv
+esac
+
+if [ -n "$app_name" ]
+then
+    echo "$app_name"
+    case "$2" in
+        "pre") ww_"$app_name"_preinstall ;;
+        "post") ww_"$app_name"_postinstall ;;
+    esac
+fi
