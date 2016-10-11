@@ -227,18 +227,27 @@ echo "------------------------------------------------------"
 
 ww_init()
 {
-if [ -z "$WW_SCREEN_RES" ]
-then
-    WW_SCREEN_RES=$(xrandr -q | awk -F'current' -F',' 'NR==1 {gsub("( |current)","");print $2}')
-fi
+XDG_CONFIG_HOME="${XDG_CONFIG_HOME:-$HOME/.config}"
+XDG_CACHE_HOME="${XDG_CACHE_HOME:-$HOME/.cache}"
+WW_CACHE="$XDG_CACHE_HOME/winewizard"
+mkdir -p "$WW_CACHE"
+
+WW_VMEMORY_SIZE=$(cat "$XDG_CONFIG_HOME/winewizard/settings.conf" | sed -n 's/^VideoMemorySize=//p')
 if [ -z "$WW_VMEMORY_SIZE" ]
 then
     WW_VMEMORY_SIZE="default"
 fi
+WW_SCR_W=$(cat "$XDG_CONFIG_HOME/winewizard/settings.conf" | sed -n 's/^ScreenWidth=//p')
+WW_SCR_H=$(cat "$XDG_CONFIG_HOME/winewizard/settings.conf" | sed -n 's/^ScreenHeight=//p')
+if [ -z "$WW_SCR_W" ] || [ -z "$WW_SCR_H" ]
+then
+    WW_SCREEN_RES=$(xrandr -q | awk -F'current' -F',' 'NR==1 {gsub("( |current)","");print $2}')
+else
+    WW_SCREEN_RES=$(echo "$WW_SCR_W"x"$WW_SCR_H")
+fi
+unset WW_SCR_W
+unset WW_SCR_H
 
-XDG_CACHE_HOME="${XDG_CACHE_HOME:-$HOME/.cache}"
-WW_CACHE="$XDG_CACHE_HOME/winewizard"
-mkdir -p "$WW_CACHE"
 WW_C="$WINEPREFIX/dosdevices/c:"
 WW_WINDOWS="$WW_C/windows"
 
@@ -262,17 +271,6 @@ WW_UNATTENDED_SLASH_QUIET="/quiet"
 WW_UNATTENDED_SLASH_S="/S"
 WW_UNATTENDED_DASH_SILENT="-silent"
 WW_UNATTENDED_SLASH_SILENT="/silent"
-
-case "$WW_WINE_VERSION" in
-    1.4-*)     WW_WINE_VERSION="1.4.40"; export WW_WINE_VERSION;;
-    1.4)       WW_WINE_VERSION="1.4.0";  export WW_WINE_VERSION;;
-    1.6-*)     WW_WINE_VERSION="1.6.0";  export WW_WINE_VERSION;;
-    1.6)       WW_WINE_VERSION="1.6.0";  export WW_WINE_VERSION;;
-    1.8-*)     WW_WINE_VERSION="1.8.0";  export WW_WINE_VERSION;;
-    1.8)       WW_WINE_VERSION="1.8.0";  export WW_WINE_VERSION;;
-esac
-WW_WINE_MINOR=`echo $WW_WINE_VERSION | sed 's/1\.\([0-9]*\)\..*/\1/'`
-WW_WINE_MICRO=`echo $WW_WINE_VERSION | sed 's/1.[0-9][0-9]*\.\([0-9]*\).*/\1/'`
 
 WW_DX_FEB_PATH="$WW_CACHE"/directx9.feb2010.exe
 WW_DX_JUN_PATH="$WW_CACHE"/directx9.jun2010.exe
@@ -946,6 +944,24 @@ ww_wine_checksum()
 test -f "$WW_CACHE"/wslin32 || ww_die "Wine checksum base doesn't found!"
 cat "$WW_CACHE"/wslin32 | grep "$1;" | cut -d';' -f3-
 
+}
+
+#---------------------------------------------------------------------------------------
+
+ww_wine_prepare_version()
+{
+case "$WW_WINE_VERSION" in
+    1.4-*)     WW_WINE_VERSION="1.4.40"; export WW_WINE_VERSION;;
+    1.4)       WW_WINE_VERSION="1.4.0";  export WW_WINE_VERSION;;
+    1.6-*)     WW_WINE_VERSION="1.6.0";  export WW_WINE_VERSION;;
+    1.6)       WW_WINE_VERSION="1.6.0";  export WW_WINE_VERSION;;
+    1.8-*)     WW_WINE_VERSION="1.8.0";  export WW_WINE_VERSION;;
+    1.8)       WW_WINE_VERSION="1.8.0";  export WW_WINE_VERSION;;
+    1.9)       WW_WINE_VERSION="1.9.0";  export WW_WINE_VERSION;;
+    1.9-*)     WW_WINE_VERSION="1.9.0";  export WW_WINE_VERSION;;
+esac
+WW_WINE_MINOR=`echo $WW_WINE_VERSION | sed 's/1\.\([0-9]*\)\..*/\1/'`
+WW_WINE_MICRO=`echo $WW_WINE_VERSION | sed 's/1.[0-9][0-9]*\.\([0-9]*\).*/\1/'`
 }
 
 #---------------------------------------------------------------------------------------
@@ -6597,8 +6613,9 @@ ww_cd_repo_wine xvid.exe --mode unattended --decode_divx 1 --decode_3ivx 1 --dec
 #                                         MAIN                                          
 #---------------------------------------------------------------------------------------
 
-WW_WINE_VERSION=$WW_BW
 ww_init
+WW_WINE_VERSION=$WW_BW
+ww_wine_prepare_version
 ww_install_wine
 ww_create_prefix
 for f in $WW_BP
@@ -6609,14 +6626,11 @@ ww_setup
 if [ $WW_BW != $WW_AW ]
 then
     WW_WINE_VERSION=$WW_AW
-    ww_init
+    ww_wine_prepare_version
     ww_install_wine
-else
-    ww_init
 fi
 for f in $WW_AP
 do
     ww_install $f
 done
 ww_done
-
