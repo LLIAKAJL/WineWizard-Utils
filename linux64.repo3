@@ -199,7 +199,8 @@
             "i": 35,
             "n": "d3drm",
             "c": [
-                0
+                0,
+                3
             ],
             "h": "MS d3drm.dll"
         },
@@ -405,6 +406,7 @@
             "n": "directmusic",
             "c": [
                 0,
+                3,
                 10
             ],
             "h": "MS DirectMusic from DirectX user redistributable"
@@ -413,7 +415,8 @@
             "i": 47,
             "n": "directplay",
             "c": [
-                0
+                0,
+                3
             ],
             "h": "MS DirectPlay from DirectX user redistributable"
         },
@@ -550,7 +553,8 @@
             "i": 62,
             "n": "dsdmo",
             "c": [
-                0
+                0,
+                3
             ],
             "h": "MS dsdmo.dll"
         },
@@ -559,6 +563,7 @@
             "n": "dsound",
             "c": [
                 0,
+                3,
                 10
             ],
             "h": "MS DirectSound from DirectX user redistributable"
@@ -567,7 +572,8 @@
             "i": 64,
             "n": "dxdiag",
             "c": [
-                0
+                0,
+                3
             ],
             "h": "DirectX Diagnostic Tool"
         },
@@ -575,7 +581,8 @@
             "i": 65,
             "n": "dxdiagn",
             "c": [
-                0
+                0,
+                3
             ],
             "h": "DirectX Diagnostic Library"
         },
@@ -1270,7 +1277,8 @@
             "i": 145,
             "n": "psm_0",
             "c": [
-                0
+                0,
+                9
             ],
             "h": "Set MaxShaderModelPS to 0"
         },
@@ -1278,7 +1286,8 @@
             "i": 146,
             "n": "psm_1",
             "c": [
-                0
+                0,
+                9
             ],
             "h": "Set MaxShaderModelPS to 1"
         },
@@ -1286,7 +1295,8 @@
             "i": 147,
             "n": "psm_2",
             "c": [
-                0
+                0,
+                9
             ],
             "h": "Set MaxShaderModelPS to 2"
         },
@@ -1294,7 +1304,8 @@
             "i": 148,
             "n": "psm_3",
             "c": [
-                0
+                0,
+                9
             ],
             "h": "Set MaxShaderModelPS to 3"
         },
@@ -1459,6 +1470,7 @@
             "n": "sound_alsa",
             "c": [
                 0,
+                9,
                 10
             ],
             "h": "Set sound driver to ALSA"
@@ -1468,6 +1480,7 @@
             "n": "sound_coreaudio",
             "c": [
                 0,
+                9,
                 10
             ],
             "h": "Set sound driver to Mac CoreAudio"
@@ -1477,6 +1490,7 @@
             "n": "sound_disabled",
             "c": [
                 0,
+                9,
                 10
             ],
             "h": "Set sound driver to disabled"
@@ -1486,6 +1500,7 @@
             "n": "sound_oss",
             "c": [
                 0,
+                9,
                 10
             ],
             "h": "Set sound driver to OSS"
@@ -1495,6 +1510,7 @@
             "n": "sound_pulse",
             "c": [
                 0,
+                9,
                 10
             ],
             "h": "Set sound driver to PulseAudio"
@@ -2006,6 +2022,7 @@
             "n": "xact",
             "c": [
                 0,
+                3,
                 10
             ],
             "h": "MS XACT Engine"
@@ -2015,6 +2032,7 @@
             "n": "xact_jun2010",
             "c": [
                 0,
+                3,
                 10
             ],
             "h": "MS XACT Engine"
@@ -2023,7 +2041,8 @@
             "i": 230,
             "n": "xinput",
             "c": [
-                0
+                0,
+                3
             ],
             "h": "Microsoft XInput (Xbox controller support)"
         },
@@ -3498,6 +3517,18 @@
         {
             "i": 592,
             "n": "1.9.21"
+        },
+        {
+            "i": 593,
+            "n": "1.9.21-staging"
+        },
+        {
+            "i": 594,
+            "n": "1.9.22"
+        },
+        {
+            "i": 595,
+            "n": "1.9.22-staging"
         },
         {
             "i": 559,

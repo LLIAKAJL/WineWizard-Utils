@@ -368,7 +368,8 @@
             "i": 42,
             "n": "devenum",
             "c": [
-                0
+                0,
+                3
             ],
             "h": "MS devenum.dll from DirectX user redistributable"
         },
@@ -432,6 +433,7 @@
             "n": "disable_d3dx11_42",
             "c": [
                 0,
+                3,
                 4,
                 9
             ],
@@ -442,6 +444,7 @@
             "n": "disable_d3dx11_43",
             "c": [
                 0,
+                3,
                 4,
                 9
             ],
@@ -451,7 +454,8 @@
             "i": 51,
             "n": "dmsynth",
             "c": [
-                0
+                0,
+                3
             ],
             "h": "MS midi synthesizer from DirectX user redistributable"
         },
@@ -3707,6 +3711,14 @@
         {
             "i": 794,
             "n": "1.9.21-staging"
+        },
+        {
+            "i": 795,
+            "n": "1.9.22"
+        },
+        {
+            "i": 796,
+            "n": "1.9.22-staging"
         },
         {
             "i": 757,
