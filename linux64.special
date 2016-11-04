@@ -3,15 +3,31 @@
 #---------------------------------------------------------------------------------------
 
 #---------------------------------------------------------------------------------------
-#                                          MAIN                                       
+#                                         START                                         
 #---------------------------------------------------------------------------------------
 
+ww_special_script_execute()
+{
 if [ -n "$app_name" ]
 then
-    echo "$app_name"
-    case "$2" in
-        "pre") ww_"$app_name"_preinstall ;;
-        "post") ww_"$app_name"_postinstall ;;
+    if type ww_download_"$app_name" | grep -i function > /dev/null
+    then
+        ww_download_"$app_name"
+    fi
+    case $2 in
+        pre)
+            if type ww_"$app_name"_preinstall | grep -i function > /dev/null
+            then
+                ww_"$app_name"_preinstall
+            fi
+            ;;
+        post)
+            if ww_"$app_name"_postinstall | grep -i function > /dev/null
+            then
+                ww_"$app_name"_postinstall
+            fi
+            ;;
     esac
 fi
 unset $app_name
+}

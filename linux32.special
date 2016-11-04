@@ -17,13 +17,8 @@ wineserver -w
 rm -rf "$WW_C"/EDZV
 }
 
-ww_edzv_postinstall()
-{
-:
-}
-
 #---------------------------------------------------------------------------------------
-#                                          MAIN                                       
+#                                         START                                         
 #---------------------------------------------------------------------------------------
 
 ww_special_script_execute()
@@ -33,10 +28,24 @@ case "$1" in
 esac
 if [ -n "$app_name" ]
 then
-    ww_download_"$app_name"
+    if type ww_download_"$app_name" | grep -i function > /dev/null
+    then
+        ww_download_"$app_name"
+    fi
     case $2 in
-        pre) ww_"$app_name"_preinstall ;;
-        post) ww_"$app_name"_preinstall ;;
+        pre)
+            if type ww_"$app_name"_preinstall | grep -i function > /dev/null
+            then
+                ww_"$app_name"_preinstall
+            fi
+            ;;
+        post)
+            if ww_"$app_name"_postinstall | grep -i function > /dev/null
+            then
+                ww_"$app_name"_postinstall
+            fi
+            ;;
     esac
 fi
+unset $app_name
 }

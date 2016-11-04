@@ -1,6 +1,192 @@
 {
     "packages": [
         {
+            "i": 13,
+            "n": "adobeair",
+            "c": [
+                0
+            ],
+            "h": "Adobe AIR 20.x"
+        },
+        {
+            "i": 14,
+            "n": "allcodecs",
+            "c": [
+                0,
+                2
+            ],
+            "h": "All codecs (dirac, ffdshow, icodecs, l3codecx, xvid) except wmp"
+        },
+        {
+            "i": 15,
+            "n": "allfonts",
+            "c": [
+                0,
+                5
+            ],
+            "h": "All fonts"
+        },
+        {
+            "i": 16,
+            "n": "amstream",
+            "c": [
+                0
+            ],
+            "h": "MS amstream.dll"
+        },
+        {
+            "i": 17,
+            "n": "ao_disabled",
+            "c": [
+                0,
+                9
+            ],
+            "h": "Disable AlwaysOffscreen (default)"
+        },
+        {
+            "i": 18,
+            "n": "ao_enabled",
+            "c": [
+                0,
+                9
+            ],
+            "h": "Enable AlwaysOffscreen"
+        },
+        {
+            "i": 19,
+            "n": "art2kmin",
+            "c": [
+                0
+            ],
+            "h": "MS Access 2007 runtime"
+        },
+        {
+            "i": 20,
+            "n": "atmlib",
+            "c": [
+                0
+            ],
+            "h": "Adobe Type Manager"
+        },
+        {
+            "i": 21,
+            "n": "avifil32",
+            "c": [
+                0
+            ],
+            "h": "MS avifil32.dll"
+        },
+        {
+            "i": 22,
+            "n": "baekmuk",
+            "c": [
+                0,
+                5
+            ],
+            "h": "Baekmuk Korean fonts"
+        },
+        {
+            "i": 23,
+            "n": "binkw32",
+            "c": [
+                0
+            ],
+            "h": "RAD Game Tools binkw32.dll"
+        },
+        {
+            "i": 24,
+            "n": "cabinet",
+            "c": [
+                0
+            ],
+            "h": "Microsoft cabinet.dll"
+        },
+        {
+            "i": 25,
+            "n": "cambria",
+            "c": [
+                0,
+                5
+            ],
+            "h": "MS Cambria font"
+        },
+        {
+            "i": 26,
+            "n": "cjkfonts",
+            "c": [
+                0,
+                5
+            ],
+            "h": "All Chinese, Japanese, Korean fonts and aliases"
+        },
+        {
+            "i": 27,
+            "n": "cmd",
+            "c": [
+                0
+            ],
+            "h": "MS cmd.exe"
+        },
+        {
+            "i": 28,
+            "n": "comctl32",
+            "c": [
+                0
+            ],
+            "h": "MS common controls 5.80"
+        },
+        {
+            "i": 29,
+            "n": "comctl32ocx",
+            "c": [
+                0
+            ],
+            "h": "MS comctl32.ocx and mscomctl.ocx, comctl32 wrappers for VB6"
+        },
+        {
+            "i": 30,
+            "n": "comdlg32ocx",
+            "c": [
+                0
+            ],
+            "h": "Common Dialog ActiveX Control for VB6"
+        },
+        {
+            "i": 31,
+            "n": "consolas",
+            "c": [
+                0,
+                5
+            ],
+            "h": "MS Consolas Console font"
+        },
+        {
+            "i": 32,
+            "n": "constantia",
+            "c": [
+                0,
+                5
+            ],
+            "h": "MS Constantia font"
+        },
+        {
+            "i": 33,
+            "n": "corefonts",
+            "c": [
+                0,
+                5
+            ],
+            "h": "MS Arial, Courier, Times fonts"
+        },
+        {
+            "i": 34,
+            "n": "crypt32",
+            "c": [
+                0
+            ],
+            "h": "MS crypt32"
+        },
+        {
             "i": 1,
             "n": "d3dcompiler_43",
             "c": [
@@ -10,6 +196,14 @@
             "h": "MS d3dcompiler_43.dll"
         },
         {
+            "i": 35,
+            "n": "d3drm",
+            "c": [
+                0
+            ],
+            "h": "MS d3drm.dll"
+        },
+        {
             "i": 2,
             "n": "d3dx10",
             "c": [
@@ -17,6 +211,15 @@
                 3
             ],
             "h": "MS d3dx10_??.dll from DirectX user redistributable"
+        },
+        {
+            "i": 233,
+            "n": "d3dx10_43",
+            "c": [
+                0,
+                3
+            ],
+            "h": "MS d3dx10_43.dll"
         },
         {
             "i": 3,
@@ -35,6 +238,15 @@
                 3
             ],
             "h": "MS d3dx11_43.dll"
+        },
+        {
+            "i": 36,
+            "n": "d3dx9",
+            "c": [
+                0,
+                3
+            ],
+            "h": "MS d3dx9_??.dll from DirectX 9 redistributable"
         },
         {
             "i": 5,
@@ -107,6 +319,1731 @@
                 3
             ],
             "h": "MS d3dx9_43.dll"
+        },
+        {
+            "i": 37,
+            "n": "d3dxof",
+            "c": [
+                0,
+                3
+            ],
+            "h": "MS d3dxof.dll from DirectX user redistributable"
+        },
+        {
+            "i": 38,
+            "n": "dbghelp",
+            "c": [
+                0
+            ],
+            "h": "MS dbghelp.dll"
+        },
+        {
+            "i": 39,
+            "n": "ddr_gdi",
+            "c": [
+                0,
+                9
+            ],
+            "h": "Set DirectDrawRenderer to GDI"
+        },
+        {
+            "i": 40,
+            "n": "ddr_opengl",
+            "c": [
+                0,
+                9
+            ],
+            "h": "Set DirectDrawRenderer to OpenGL"
+        },
+        {
+            "i": 41,
+            "n": "desktop_mode",
+            "c": [
+                0,
+                9
+            ],
+            "h": "Set virtual desktop with your screen resolution"
+        },
+        {
+            "i": 42,
+            "n": "devenum",
+            "c": [
+                0,
+                3
+            ],
+            "h": "MS devenum.dll from DirectX user redistributable"
+        },
+        {
+            "i": 43,
+            "n": "dinput",
+            "c": [
+                0,
+                3
+            ],
+            "h": "MS dinput.dll; breaks mouse, use only on Rayman 2 etc."
+        },
+        {
+            "i": 44,
+            "n": "dinput8",
+            "c": [
+                0,
+                3
+            ],
+            "h": "MS DirectInput 8 from DirectX user redistributable"
+        },
+        {
+            "i": 45,
+            "n": "dirac",
+            "c": [
+                0,
+                2
+            ],
+            "h": "The Dirac directshow filter v1.0.2"
+        },
+        {
+            "i": 46,
+            "n": "directmusic",
+            "c": [
+                0,
+                10
+            ],
+            "h": "MS DirectMusic from DirectX user redistributable"
+        },
+        {
+            "i": 47,
+            "n": "directplay",
+            "c": [
+                0
+            ],
+            "h": "MS DirectPlay from DirectX user redistributable"
+        },
+        {
+            "i": 48,
+            "n": "directx9",
+            "c": [
+                0,
+                3
+            ],
+            "h": "MS DirectX 9 (Usually overkill.  Try d3dx9_36 first)"
+        },
+        {
+            "i": 49,
+            "n": "disable_d3dx11_42",
+            "c": [
+                0,
+                3,
+                4,
+                9
+            ],
+            "h": "Set override mode \"disable\" for d3dx11_42.dll"
+        },
+        {
+            "i": 50,
+            "n": "disable_d3dx11_43",
+            "c": [
+                0,
+                3,
+                4,
+                9
+            ],
+            "h": "Set override mode \"disable\" for d3dx11_43.dll"
+        },
+        {
+            "i": 51,
+            "n": "dmsynth",
+            "c": [
+                0,
+                3
+            ],
+            "h": "MS midi synthesizer from DirectX user redistributable"
+        },
+        {
+            "i": 52,
+            "n": "dotnet20",
+            "c": [
+                0,
+                1
+            ],
+            "h": "MS .NET 2.0"
+        },
+        {
+            "i": 53,
+            "n": "dotnet20sp1",
+            "c": [
+                0,
+                1
+            ],
+            "h": "MS .NET 2.0 SP1 (experimental)"
+        },
+        {
+            "i": 54,
+            "n": "dotnet20sp2",
+            "c": [
+                0,
+                1
+            ],
+            "h": "MS .NET 2.0 SP2 (experimental)"
+        },
+        {
+            "i": 55,
+            "n": "dotnet30",
+            "c": [
+                0,
+                1
+            ],
+            "h": "MS .NET 3.0"
+        },
+        {
+            "i": 56,
+            "n": "dotnet30sp1",
+            "c": [
+                0,
+                1
+            ],
+            "h": "MS .NET 3.0 SP1"
+        },
+        {
+            "i": 57,
+            "n": "dotnet35",
+            "c": [
+                0,
+                1
+            ],
+            "h": "MS .NET 3.5"
+        },
+        {
+            "i": 58,
+            "n": "dotnet35sp1",
+            "c": [
+                0,
+                1
+            ],
+            "h": "MS .NET 3.5 SP1"
+        },
+        {
+            "i": 59,
+            "n": "dotnet_verifier",
+            "c": [
+                0,
+                1
+            ],
+            "h": "MS .NET Verifier"
+        },
+        {
+            "i": 60,
+            "n": "dpvoice",
+            "c": [
+                0
+            ],
+            "h": "Microsoft dpvoice dpvvox dpvacm Audio dlls"
+        },
+        {
+            "i": 61,
+            "n": "droid",
+            "c": [
+                0,
+                5
+            ],
+            "h": "Droid fonts"
+        },
+        {
+            "i": 62,
+            "n": "dsdmo",
+            "c": [
+                0
+            ],
+            "h": "MS dsdmo.dll"
+        },
+        {
+            "i": 63,
+            "n": "dsound",
+            "c": [
+                0,
+                10
+            ],
+            "h": "MS DirectSound from DirectX user redistributable"
+        },
+        {
+            "i": 64,
+            "n": "dxdiag",
+            "c": [
+                0
+            ],
+            "h": "DirectX Diagnostic Tool"
+        },
+        {
+            "i": 65,
+            "n": "dxdiagn",
+            "c": [
+                0
+            ],
+            "h": "DirectX Diagnostic Library"
+        },
+        {
+            "i": 66,
+            "n": "esent",
+            "c": [
+                0
+            ],
+            "h": "MS Extensible Storage Engine"
+        },
+        {
+            "i": 67,
+            "n": "eufonts",
+            "c": [
+                0,
+                5
+            ],
+            "h": "Updated fonts for Romanian and Bulgarian"
+        },
+        {
+            "i": 68,
+            "n": "fakechinese",
+            "c": [
+                0,
+                5
+            ],
+            "h": "Creates aliases for Chinese fonts using WenQuanYi fonts"
+        },
+        {
+            "i": 69,
+            "n": "fakejapanese",
+            "c": [
+                0,
+                5
+            ],
+            "h": "Creates aliases for Japanese fonts using Takao fonts"
+        },
+        {
+            "i": 70,
+            "n": "fakejapanese_ipamona",
+            "c": [
+                0,
+                5
+            ],
+            "h": "Creates aliases for Japanese fonts using IPAMona fonts"
+        },
+        {
+            "i": 71,
+            "n": "fakekorean",
+            "c": [
+                0,
+                5
+            ],
+            "h": "Creates aliases for Korean fonts using Baekmuk fonts"
+        },
+        {
+            "i": 72,
+            "n": "ffdshow",
+            "c": [
+                0,
+                2
+            ],
+            "h": "ffdshow video codecs"
+        },
+        {
+            "i": 73,
+            "n": "flash",
+            "c": [
+                0
+            ],
+            "h": "Flash Player 14"
+        },
+        {
+            "i": 74,
+            "n": "fontsmooth_bgr",
+            "c": [
+                0,
+                9
+            ],
+            "h": "Enable subpixel font smoothing for BGR LCDs"
+        },
+        {
+            "i": 75,
+            "n": "fontsmooth_disable",
+            "c": [
+                0,
+                9
+            ],
+            "h": "Disable font smoothing"
+        },
+        {
+            "i": 76,
+            "n": "fontsmooth_gray",
+            "c": [
+                0,
+                9
+            ],
+            "h": "Enable subpixel font smoothing"
+        },
+        {
+            "i": 77,
+            "n": "fontsmooth_rgb",
+            "c": [
+                0,
+                9
+            ],
+            "h": "Enable subpixel font smoothing for RGB LCDs"
+        },
+        {
+            "i": 78,
+            "n": "forcemono",
+            "c": [
+                0,
+                9
+            ],
+            "h": "Force using mono instead of .Net (for debugging)"
+        },
+        {
+            "i": 79,
+            "n": "gdiplus",
+            "c": [
+                0
+            ],
+            "h": "MS GDI+"
+        },
+        {
+            "i": 80,
+            "n": "gdiplus_winxp",
+            "c": [
+                0
+            ],
+            "h": "MS GDI+"
+        },
+        {
+            "i": 81,
+            "n": "gfw",
+            "c": [
+                0
+            ],
+            "h": "MS Games For Windows Live (xlive.dll)"
+        },
+        {
+            "i": 82,
+            "n": "glidewrapper",
+            "c": [
+                0
+            ],
+            "h": "GlideWrapper"
+        },
+        {
+            "i": 83,
+            "n": "glsl_disabled",
+            "c": [
+                0,
+                9
+            ],
+            "h": "Disable glsl shaders, use arb shaders (faster, but sometimes breaks)"
+        },
+        {
+            "i": 84,
+            "n": "glsl_enabled",
+            "c": [
+                0,
+                9
+            ],
+            "h": "Enable glsl shaders (default)"
+        },
+        {
+            "i": 85,
+            "n": "glut",
+            "c": [
+                0
+            ],
+            "h": "The glut utility library for OpenGL"
+        },
+        {
+            "i": 86,
+            "n": "gmdls",
+            "c": [
+                0
+            ],
+            "h": "General MIDI DLS Collection"
+        },
+        {
+            "i": 87,
+            "n": "grabfullscreen_n",
+            "c": [
+                0,
+                9
+            ],
+            "h": "Disable cursor clipping for full-screen windows (default)"
+        },
+        {
+            "i": 88,
+            "n": "grabfullscreen_y",
+            "c": [
+                0,
+                9
+            ],
+            "h": "Force cursor clipping for full-screen windows (needed by some games)"
+        },
+        {
+            "i": 89,
+            "n": "gsm_0",
+            "c": [
+                0,
+                9
+            ],
+            "h": "Set MaxShaderModelGS to 0"
+        },
+        {
+            "i": 90,
+            "n": "gsm_1",
+            "c": [
+                0,
+                9
+            ],
+            "h": "Set MaxShaderModelGS to 1"
+        },
+        {
+            "i": 91,
+            "n": "gsm_2",
+            "c": [
+                0,
+                9
+            ],
+            "h": "Set MaxShaderModelGS to 2"
+        },
+        {
+            "i": 92,
+            "n": "gsm_3",
+            "c": [
+                0,
+                9
+            ],
+            "h": "Set MaxShaderModelGS to 3"
+        },
+        {
+            "i": 93,
+            "n": "heapcheck",
+            "c": [
+                0,
+                9
+            ],
+            "h": "Enable heap checking with GlobalFlag"
+        },
+        {
+            "i": 94,
+            "n": "hid",
+            "c": [
+                0
+            ],
+            "h": "MS hid"
+        },
+        {
+            "i": 95,
+            "n": "hidewineexports_disable",
+            "c": [
+                0,
+                9
+            ],
+            "h": "Disable hiding wine exports from applications (wine-staging)"
+        },
+        {
+            "i": 96,
+            "n": "hidewineexports_enable",
+            "c": [
+                0,
+                9
+            ],
+            "h": "Enable hiding wine exports from applications (wine-staging)"
+        },
+        {
+            "i": 97,
+            "n": "hosts",
+            "c": [
+                0,
+                9
+            ],
+            "h": "Add empty C:\\windows\\system32\\drivers\\etc{hosts,services} files"
+        },
+        {
+            "i": 98,
+            "n": "icodecs",
+            "c": [
+                0,
+                2
+            ],
+            "h": "Indeo codecs"
+        },
+        {
+            "i": 99,
+            "n": "ie6",
+            "c": [
+                0
+            ],
+            "h": "Internet Explorer 6"
+        },
+        {
+            "i": 100,
+            "n": "ie7",
+            "c": [
+                0
+            ],
+            "h": "Internet Explorer 7"
+        },
+        {
+            "i": 101,
+            "n": "ie8",
+            "c": [
+                0
+            ],
+            "h": "Internet Explorer 8"
+        },
+        {
+            "i": 102,
+            "n": "ie8_kb2936068",
+            "c": [
+                0
+            ],
+            "h": "Cumulative Security Update for Internet Explorer 8"
+        },
+        {
+            "i": 103,
+            "n": "ipamona",
+            "c": [
+                0
+            ],
+            "h": "Creates aliases for Japanese fonts using IPAMona fonts"
+        },
+        {
+            "i": 104,
+            "n": "jet40",
+            "c": [
+                0
+            ],
+            "h": "MS Jet 4.0 Service Pack 8"
+        },
+        {
+            "i": 105,
+            "n": "l3codecx",
+            "c": [
+                0,
+                2
+            ],
+            "h": "MPEG Layer-3 Audio Codec for Microsoft DirectShow"
+        },
+        {
+            "i": 106,
+            "n": "liberation",
+            "c": [
+                0,
+                5
+            ],
+            "h": "Red Hat Liberation fonts (Sans, Serif, Mono)"
+        },
+        {
+            "i": 107,
+            "n": "lucida",
+            "c": [
+                0,
+                5
+            ],
+            "h": "MS Lucida Console font"
+        },
+        {
+            "i": 108,
+            "n": "mdac27",
+            "c": [
+                0
+            ],
+            "h": "Microsoft Data Access Components 2.7 sp1"
+        },
+        {
+            "i": 109,
+            "n": "mdac28",
+            "c": [
+                0
+            ],
+            "h": "Microsoft Data Access Components 2.8 sp1"
+        },
+        {
+            "i": 110,
+            "n": "mdx",
+            "c": [
+                0
+            ],
+            "h": "Managed DirectX"
+        },
+        {
+            "i": 111,
+            "n": "mf",
+            "c": [
+                0
+            ],
+            "h": "MS Media Foundation"
+        },
+        {
+            "i": 112,
+            "n": "mfc40",
+            "c": [
+                0
+            ],
+            "h": "MS mfc40 (Microsoft Foundation Classes from Visual C++ 4.0)"
+        },
+        {
+            "i": 113,
+            "n": "mfc42",
+            "c": [
+                0
+            ],
+            "h": "Visual C++ 6 SP4 mfc42 library; part of vcrun6"
+        },
+        {
+            "i": 114,
+            "n": "msacm32",
+            "c": [
+                0
+            ],
+            "h": "MS ACM32"
+        },
+        {
+            "i": 115,
+            "n": "msasn1",
+            "c": [
+                0
+            ],
+            "h": "MS ASN1"
+        },
+        {
+            "i": 116,
+            "n": "msctf",
+            "c": [
+                0
+            ],
+            "h": "MS Text Service Module"
+        },
+        {
+            "i": 117,
+            "n": "msdxmocx",
+            "c": [
+                0
+            ],
+            "h": "MS Windows Media Player 2 ActiveX control for VB6"
+        },
+        {
+            "i": 118,
+            "n": "msflxgrd",
+            "c": [
+                0
+            ],
+            "h": "MS FlexGrid Control (msflxgrd.ocx)"
+        },
+        {
+            "i": 119,
+            "n": "msftedit",
+            "c": [
+                0
+            ],
+            "h": "Microsoft RichEdit Control"
+        },
+        {
+            "i": 120,
+            "n": "mshflxgd",
+            "c": [
+                0
+            ],
+            "h": "MS Hierarchical FlexGrid Control (mshflxgd.ocx)"
+        },
+        {
+            "i": 121,
+            "n": "msls31",
+            "c": [
+                0
+            ],
+            "h": "MS Line Services"
+        },
+        {
+            "i": 122,
+            "n": "msmask",
+            "c": [
+                0
+            ],
+            "h": "MS Masked Edit Control"
+        },
+        {
+            "i": 123,
+            "n": "mspatcha",
+            "c": [
+                0
+            ],
+            "h": "MS mspatcha.dll"
+        },
+        {
+            "i": 124,
+            "n": "msscript",
+            "c": [
+                0
+            ],
+            "h": "MS Windows Script Control"
+        },
+        {
+            "i": 125,
+            "n": "msvcirt",
+            "c": [
+                0
+            ],
+            "h": "Visual C++ 6 SP4 msvcirt library; part of vcrun6"
+        },
+        {
+            "i": 126,
+            "n": "msxml3",
+            "c": [
+                0
+            ],
+            "h": "MS XML Core Services 3.0"
+        },
+        {
+            "i": 127,
+            "n": "msxml4",
+            "c": [
+                0
+            ],
+            "h": "MS XML Core Services 4.0"
+        },
+        {
+            "i": 128,
+            "n": "msxml6",
+            "c": [
+                0
+            ],
+            "h": "MS XML Core Services 6.0 sp1"
+        },
+        {
+            "i": 129,
+            "n": "multisampling_disabled",
+            "c": [
+                0,
+                9
+            ],
+            "h": "Disable Direct3D multisampling"
+        },
+        {
+            "i": 130,
+            "n": "multisampling_enabled",
+            "c": [
+                0,
+                9
+            ],
+            "h": "Enable Direct3D multisampling"
+        },
+        {
+            "i": 131,
+            "n": "mwo_disable",
+            "c": [
+                0,
+                9
+            ],
+            "h": "Set DirectInput MouseWarpOverride to disable"
+        },
+        {
+            "i": 132,
+            "n": "mwo_enabled",
+            "c": [
+                0,
+                9
+            ],
+            "h": "Set DirectInput MouseWarpOverride to enabled (default)"
+        },
+        {
+            "i": 133,
+            "n": "mwo_force",
+            "c": [
+                0,
+                9
+            ],
+            "h": "Set DirectInput MouseWarpOverride to force (needed by some games)"
+        },
+        {
+            "i": 134,
+            "n": "native_mdac",
+            "c": [
+                0,
+                9
+            ],
+            "h": "Override odbc32, odbccp32 and oledb32"
+        },
+        {
+            "i": 135,
+            "n": "native_oleaut32",
+            "c": [
+                0,
+                9
+            ],
+            "h": "Override oleaut32"
+        },
+        {
+            "i": 136,
+            "n": "nocrashdialog",
+            "c": [
+                0,
+                9
+            ],
+            "h": "Disable crash dialog"
+        },
+        {
+            "i": 137,
+            "n": "npm_repack",
+            "c": [
+                0,
+                9
+            ],
+            "h": "Set NonPower2Mode to repack"
+        },
+        {
+            "i": 138,
+            "n": "ogg",
+            "c": [
+                0
+            ],
+            "h": "OpenCodecs 0.85: FLAC, Speex, Theora, Vorbis, WebM"
+        },
+        {
+            "i": 139,
+            "n": "opensymbol",
+            "c": [
+                0,
+                5
+            ],
+            "h": "OpenSymbol fonts (replacement for Wingdings)"
+        },
+        {
+            "i": 140,
+            "n": "orm_backbuffer",
+            "c": [
+                0,
+                9
+            ],
+            "h": "Set OffscreenRenderingMode=backbuffer"
+        },
+        {
+            "i": 141,
+            "n": "orm_fbo",
+            "c": [
+                0,
+                9
+            ],
+            "h": "Set OffscreenRenderingMode=fbo (default)"
+        },
+        {
+            "i": 142,
+            "n": "pdh",
+            "c": [
+                0
+            ],
+            "h": "MS pdh.dll (Performance Data Helper)"
+        },
+        {
+            "i": 143,
+            "n": "physx",
+            "c": [
+                0
+            ],
+            "h": "NVidia PhysX"
+        },
+        {
+            "i": 144,
+            "n": "pngfilt",
+            "c": [
+                0
+            ],
+            "h": "MS pngfilt.dll (from ie5)"
+        },
+        {
+            "i": 238,
+            "n": "postinstall_script",
+            "c": [
+                0
+            ],
+            "h": "The special postinstall script for some applications"
+        },
+        {
+            "i": 237,
+            "n": "preinstall_script",
+            "c": [
+                0
+            ],
+            "h": "The special preinstall script for some applications"
+        },
+        {
+            "i": 145,
+            "n": "psm_0",
+            "c": [
+                0
+            ],
+            "h": "Set MaxShaderModelPS to 0"
+        },
+        {
+            "i": 146,
+            "n": "psm_1",
+            "c": [
+                0
+            ],
+            "h": "Set MaxShaderModelPS to 1"
+        },
+        {
+            "i": 147,
+            "n": "psm_2",
+            "c": [
+                0
+            ],
+            "h": "Set MaxShaderModelPS to 2"
+        },
+        {
+            "i": 148,
+            "n": "psm_3",
+            "c": [
+                0
+            ],
+            "h": "Set MaxShaderModelPS to 3"
+        },
+        {
+            "i": 149,
+            "n": "python26",
+            "c": [
+                0
+            ],
+            "h": "Python Interpreter, version 2.6.2"
+        },
+        {
+            "i": 150,
+            "n": "qdvd",
+            "c": [
+                0
+            ],
+            "h": "MS qdvd.dll (from DirectX 9 user redistributable)"
+        },
+        {
+            "i": 151,
+            "n": "quartz",
+            "c": [
+                0
+            ],
+            "h": "MS quartz.dll (from Directx 9 user redistributable)"
+        },
+        {
+            "i": 152,
+            "n": "quicktime72",
+            "c": [
+                0
+            ],
+            "h": "Apple QuickTime 7.2"
+        },
+        {
+            "i": 153,
+            "n": "quicktime76",
+            "c": [
+                0
+            ],
+            "h": "Apple QuickTime 7.6"
+        },
+        {
+            "i": 154,
+            "n": "riched20",
+            "c": [
+                0
+            ],
+            "h": "MS RichEdit Control 2.0 (riched20.dll)"
+        },
+        {
+            "i": 155,
+            "n": "riched30",
+            "c": [
+                0
+            ],
+            "h": "MS RichEdit Control 3.0 (riched20.dll, msls31.dll)"
+        },
+        {
+            "i": 156,
+            "n": "richtx32",
+            "c": [
+                0
+            ],
+            "h": "MS Rich TextBox Control 6.0"
+        },
+        {
+            "i": 157,
+            "n": "rtlm_auto",
+            "c": [
+                0,
+                7,
+                9
+            ],
+            "h": "Set RenderTargetLockMode to auto (default)"
+        },
+        {
+            "i": 158,
+            "n": "rtlm_disabled",
+            "c": [
+                0,
+                7,
+                9
+            ],
+            "h": "Set RenderTargetLockMode to disabled"
+        },
+        {
+            "i": 159,
+            "n": "rtlm_readdraw",
+            "c": [
+                0,
+                7,
+                9
+            ],
+            "h": "Set RenderTargetLockMode to readdraw"
+        },
+        {
+            "i": 160,
+            "n": "rtlm_readtex",
+            "c": [
+                0,
+                7,
+                9
+            ],
+            "h": "Set RenderTargetLockMode to readtex"
+        },
+        {
+            "i": 161,
+            "n": "rtlm_texdraw",
+            "c": [
+                0,
+                7,
+                9
+            ],
+            "h": "Set RenderTargetLockMode to texdraw"
+        },
+        {
+            "i": 162,
+            "n": "rtlm_textex",
+            "c": [
+                0,
+                7,
+                9
+            ],
+            "h": "Set RenderTargetLockMode to textex"
+        },
+        {
+            "i": 163,
+            "n": "sdl",
+            "c": [
+                0
+            ],
+            "h": "Simple DirectMedia Layer"
+        },
+        {
+            "i": 164,
+            "n": "secur32",
+            "c": [
+                0
+            ],
+            "h": "MS Security Support Provider Interface"
+        },
+        {
+            "i": 165,
+            "n": "setupapi",
+            "c": [
+                0
+            ],
+            "h": "MS Setup API"
+        },
+        {
+            "i": 166,
+            "n": "shockwave",
+            "c": [
+                0
+            ],
+            "h": "Adobe Shockwave"
+        },
+        {
+            "i": 167,
+            "n": "sound_alsa",
+            "c": [
+                0,
+                10
+            ],
+            "h": "Set sound driver to ALSA"
+        },
+        {
+            "i": 168,
+            "n": "sound_coreaudio",
+            "c": [
+                0,
+                10
+            ],
+            "h": "Set sound driver to Mac CoreAudio"
+        },
+        {
+            "i": 169,
+            "n": "sound_disabled",
+            "c": [
+                0,
+                10
+            ],
+            "h": "Set sound driver to disabled"
+        },
+        {
+            "i": 170,
+            "n": "sound_oss",
+            "c": [
+                0,
+                10
+            ],
+            "h": "Set sound driver to OSS"
+        },
+        {
+            "i": 171,
+            "n": "sound_pulse",
+            "c": [
+                0,
+                10
+            ],
+            "h": "Set sound driver to PulseAudio"
+        },
+        {
+            "i": 172,
+            "n": "speechsdk",
+            "c": [
+                0
+            ],
+            "h": "MS Speech SDK 5.1"
+        },
+        {
+            "i": 173,
+            "n": "strictdrawordering_disabled",
+            "c": [
+                0,
+                9
+            ],
+            "h": "Disable StrictDrawOrdering (default)"
+        },
+        {
+            "i": 174,
+            "n": "strictdrawordering_enabled",
+            "c": [
+                0,
+                9
+            ],
+            "h": "Enable StrictDrawOrdering"
+        },
+        {
+            "i": 175,
+            "n": "tabctl32",
+            "c": [
+                0
+            ],
+            "h": "Microsoft Tabbed Dialog Control 6.0 (tabctl32.ocx)"
+        },
+        {
+            "i": 176,
+            "n": "tahoma",
+            "c": [
+                0,
+                5
+            ],
+            "h": "MS Tahoma font (not part of corefonts)"
+        },
+        {
+            "i": 177,
+            "n": "takao",
+            "c": [
+                0,
+                5
+            ],
+            "h": "Takao Japanese fonts"
+        },
+        {
+            "i": 183,
+            "n": "uff",
+            "c": [
+                0,
+                5
+            ],
+            "h": "Ubuntu Font Family"
+        },
+        {
+            "i": 184,
+            "n": "unifont",
+            "c": [
+                0,
+                5
+            ],
+            "h": "Unifont alternative to Arial Unicode MS"
+        },
+        {
+            "i": 185,
+            "n": "updspapi",
+            "c": [
+                0
+            ],
+            "h": "Windows Update Service API"
+        },
+        {
+            "i": 186,
+            "n": "usp10",
+            "c": [
+                0
+            ],
+            "h": "Uniscribe 1.325"
+        },
+        {
+            "i": 187,
+            "n": "vb2run",
+            "c": [
+                0,
+                8
+            ],
+            "h": "MS Visual Basic 2 runtime"
+        },
+        {
+            "i": 188,
+            "n": "vb3run",
+            "c": [
+                0,
+                8
+            ],
+            "h": "MS Visual Basic 3 runtime"
+        },
+        {
+            "i": 189,
+            "n": "vb4run",
+            "c": [
+                0,
+                8
+            ],
+            "h": "MS Visual Basic 4 runtime"
+        },
+        {
+            "i": 190,
+            "n": "vb5run",
+            "c": [
+                0,
+                8
+            ],
+            "h": "MS Visual Basic 5 runtime"
+        },
+        {
+            "i": 191,
+            "n": "vb6run",
+            "c": [
+                0,
+                8
+            ],
+            "h": "MS Visual Basic 6 runtime SP6"
+        },
+        {
+            "i": 192,
+            "n": "vcrun2003",
+            "c": [
+                0,
+                8
+            ],
+            "h": "Visual C++ 2003 libraries (mfc71,msvcp71,msvcr71)"
+        },
+        {
+            "i": 193,
+            "n": "vcrun2005",
+            "c": [
+                0,
+                8
+            ],
+            "h": "Visual C++ 2005 libraries (mfc80,msvcp80,msvcr80)"
+        },
+        {
+            "i": 194,
+            "n": "vcrun2008",
+            "c": [
+                0,
+                8
+            ],
+            "h": "Visual C++ 2008 libraries (mfc90,msvcp90,msvcr90)"
+        },
+        {
+            "i": 195,
+            "n": "vcrun2010",
+            "c": [
+                0,
+                8
+            ],
+            "h": "Visual C++ 2010 libraries (mfc100,msvcp100,msvcr100)"
+        },
+        {
+            "i": 196,
+            "n": "vcrun2012",
+            "c": [
+                0,
+                8
+            ],
+            "h": "Visual C++ 2012 libraries (atl110,mfc110,mfc110u,msvcp110,msvcr110,vcomp110)"
+        },
+        {
+            "i": 197,
+            "n": "vcrun2013",
+            "c": [
+                0,
+                8
+            ],
+            "h": "Visual C++ 2013 libraries (mfc120,mfc120u,msvcp120,msvcr120,vcomp120)"
+        },
+        {
+            "i": 198,
+            "n": "vcrun2015",
+            "c": [
+                0,
+                8
+            ],
+            "h": "Visual C++ 2015 libraries (concrt140.dll,mfc140.dll,mfc140u.dll,mfcm140.dll,mfcm140u.dll,msvcp140.dll,vcamp140.dll,vccorlib140.dll,vcomp140.dll,vcruntime140.dll)"
+        },
+        {
+            "i": 199,
+            "n": "vcrun6",
+            "c": [
+                0,
+                8
+            ],
+            "h": "Visual C++ 6 SP4 libraries (mfc42, msvcp60, msvcirt)"
+        },
+        {
+            "i": 200,
+            "n": "vcrun6sp6",
+            "c": [
+                0,
+                8
+            ],
+            "h": "Visual C++ 6 SP6 libraries (with fixes in atl and mfc)"
+        },
+        {
+            "i": 201,
+            "n": "videomemorysize",
+            "c": [
+                0,
+                9
+            ],
+            "h": "Set video memory size from settings"
+        },
+        {
+            "i": 202,
+            "n": "vjrun20",
+            "c": [
+                0,
+                8
+            ],
+            "h": "MS Visual J# 2.0 SE libraries (requires dotnet20)"
+        },
+        {
+            "i": 203,
+            "n": "vsm_0",
+            "c": [
+                0,
+                9
+            ],
+            "h": "Set MaxShaderModelVS to 0"
+        },
+        {
+            "i": 204,
+            "n": "vsm_1",
+            "c": [
+                0,
+                9
+            ],
+            "h": "Set MaxShaderModelVS to 1"
+        },
+        {
+            "i": 205,
+            "n": "vsm_2",
+            "c": [
+                0,
+                9
+            ],
+            "h": "Set MaxShaderModelVS to 2"
+        },
+        {
+            "i": 206,
+            "n": "vsm_3",
+            "c": [
+                0,
+                9
+            ],
+            "h": "Set MaxShaderModelVS to 3"
+        },
+        {
+            "i": 207,
+            "n": "wenquanyi",
+            "c": [
+                0,
+                5
+            ],
+            "h": "WenQuanYi CJK font"
+        },
+        {
+            "i": 208,
+            "n": "windowmanagerdecorated_n",
+            "c": [
+                0,
+                9
+            ],
+            "h": "Prevent the window manager from decorating windows"
+        },
+        {
+            "i": 209,
+            "n": "windowmanagerdecorated_y",
+            "c": [
+                0,
+                9
+            ],
+            "h": "Allow the window manager to decorate windows (default)"
+        },
+        {
+            "i": 210,
+            "n": "windowmanagermanaged_n",
+            "c": [
+                0,
+                9
+            ],
+            "h": "Prevent the window manager from controling windows"
+        },
+        {
+            "i": 211,
+            "n": "windowmanagermanaged_y",
+            "c": [
+                0,
+                9
+            ],
+            "h": "Allow the window manager to control windows (default)"
+        },
+        {
+            "i": 212,
+            "n": "windowscodecs",
+            "c": [
+                0,
+                2
+            ],
+            "h": "MS Windows Imaging Component"
+        },
+        {
+            "i": 213,
+            "n": "winhttp",
+            "c": [
+                0
+            ],
+            "h": "MS Windows HTTP Services"
+        },
+        {
+            "i": 214,
+            "n": "wininet",
+            "c": [
+                0
+            ],
+            "h": "MS Windows Internet API"
+        },
+        {
+            "i": 215,
+            "n": "winver_nt40",
+            "c": [
+                0,
+                9,
+                11
+            ],
+            "h": "Set windows version to Windows NT 4.0"
+        },
+        {
+            "i": 216,
+            "n": "winver_vista",
+            "c": [
+                0,
+                9,
+                11
+            ],
+            "h": "Set windows version to Windows Vista"
+        },
+        {
+            "i": 239,
+            "n": "winver_win10",
+            "c": [
+                0,
+                9,
+                11
+            ],
+            "h": "Set windows version to Windows 10"
+        },
+        {
+            "i": 217,
+            "n": "winver_win2k",
+            "c": [
+                0,
+                9,
+                11
+            ],
+            "h": "Set windows version to Windows 2000"
+        },
+        {
+            "i": 218,
+            "n": "winver_win2k3",
+            "c": [
+                0,
+                9,
+                11
+            ],
+            "h": "Set windows version to Windows 2003"
+        },
+        {
+            "i": 240,
+            "n": "winver_win2k8",
+            "c": [
+                0,
+                9,
+                11
+            ],
+            "h": "Set windows version to Windows 2008"
+        },
+        {
+            "i": 219,
+            "n": "winver_win7",
+            "c": [
+                0,
+                9,
+                11
+            ],
+            "h": "Set windows version to Windows 7"
+        },
+        {
+            "i": 241,
+            "n": "winver_win8",
+            "c": [
+                0,
+                9,
+                11
+            ],
+            "h": "Set windows version to Windows 8"
+        },
+        {
+            "i": 242,
+            "n": "winver_win81",
+            "c": [
+                0,
+                9,
+                11
+            ],
+            "h": "Set windows version to Windows 8.1"
+        },
+        {
+            "i": 220,
+            "n": "winver_win98",
+            "c": [
+                0,
+                9,
+                11
+            ],
+            "h": "Set windows version to Windows 98"
+        },
+        {
+            "i": 221,
+            "n": "winver_winxp",
+            "c": [
+                0,
+                9,
+                11
+            ],
+            "h": "Set windows version to Windows XP"
+        },
+        {
+            "i": 222,
+            "n": "wmi",
+            "c": [
+                0
+            ],
+            "h": "Windows Management Instrumentation (aka WBEM) Core 1.5"
+        },
+        {
+            "i": 223,
+            "n": "wmp10",
+            "c": [
+                0
+            ],
+            "h": "Windows Media Player 10"
+        },
+        {
+            "i": 224,
+            "n": "wmp9",
+            "c": [
+                0
+            ],
+            "h": "Windows Media Player 9"
+        },
+        {
+            "i": 234,
+            "n": "wmv9vcm",
+            "c": [
+                0
+            ],
+            "h": "MS Windows Media Video 9 Video Compression Manager"
+        },
+        {
+            "i": 225,
+            "n": "wsh56js",
+            "c": [
+                0
+            ],
+            "h": "MS Windows scripting 5.6, jscript only, no cscript"
+        },
+        {
+            "i": 226,
+            "n": "wsh56vb",
+            "c": [
+                0
+            ],
+            "h": "MS Windows scripting 5.6, vbscript only, no cscript"
+        },
+        {
+            "i": 227,
+            "n": "wsh57",
+            "c": [
+                0
+            ],
+            "h": "MS Windows Scripting Host 5.7"
+        },
+        {
+            "i": 228,
+            "n": "xact",
+            "c": [
+                0,
+                10
+            ],
+            "h": "MS XACT Engine"
+        },
+        {
+            "i": 229,
+            "n": "xact_jun2010",
+            "c": [
+                0,
+                10
+            ],
+            "h": "MS XACT Engine"
+        },
+        {
+            "i": 230,
+            "n": "xinput",
+            "c": [
+                0
+            ],
+            "h": "Microsoft XInput (Xbox controller support)"
+        },
+        {
+            "i": 231,
+            "n": "xna31",
+            "c": [
+                0,
+                1
+            ],
+            "h": "MS XNA Framework Redistributable 3.1"
+        },
+        {
+            "i": 232,
+            "n": "xvid",
+            "c": [
+                0,
+                2
+            ],
+            "h": "Xvid Video Codec"
         }
     ],
     "wines": [
@@ -1663,3 +3600,4 @@
         }
     ]
 }
+
